@@ -1,6 +1,6 @@
 ## Terraform Development Workflow
 
-This project uses LocalStack for local development and Terraform Cloud for production deployments.
+This project uses LocalStack for local development and Terraform Cloud for production deployment.
 
 ### Setup
 
@@ -21,7 +21,7 @@ This project uses LocalStack for local development and Terraform Cloud for produ
 
 #### Local Development (with LocalStack)
 
-Use `tflocal` commands for local development. This will interact with LocalStack instead of real AWS services:
+Use `tflocal` commands for local development. This will interact with LocalStack instead of real AWS services
 
 #### Production Deployment (with Terraform Cloud)
 
@@ -29,27 +29,47 @@ When ready to deploy to real AWS infrastructure:
 
 1. Copy the cloud configuration:
 
-   ```bash
-   cp main.tf.cloud main.tf
+   Add to main.tf
+
+   ```
+      cloud {
+         organization = "marcusal-dev"
+         workspaces {
+            name = "pairings-app"
+         }
+      }
    ```
 
-2. Initialize and apply with regular Terraform commands:
+2. Remove any state files:
+
+   ```bash
+   rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
+   ```
+
+   ```bash
+   terraform state rm $(terraform state list)
+   ```
+
+3. Initialize and apply with regular Terraform commands:
 
    ```bash
    terraform init
    terraform plan
+
+   (confirm changes)
+
    terraform apply
    ```
 
-3. After deployment, revert to local configuration:
+4. After deployment, revert any changes to continue local development:
    ```bash
-   git checkout main.tf
+   git clean -f
    ```
 
 ### File Structure
 
 - `main.tf` - Main Terraform configuration (local development version)
-- `main.tf.cloud` - Production configuration with Terraform Cloud settings
+
 - `.gitignore` - Excludes local Terraform files and state
 
 ### Important Notes
