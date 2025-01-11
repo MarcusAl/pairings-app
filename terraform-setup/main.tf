@@ -1,4 +1,10 @@
 terraform {
+  cloud {
+    organization = "marcusal-dev"
+    workspaces {
+      name = "pairings-app"
+    }
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -10,7 +16,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-2"
+  region = var.aws_region
 }
 
 data "aws_ami" "linux" {
@@ -28,10 +34,24 @@ data "aws_ami" "linux" {
   }
 }
 
-resource "aws_instance" "rails_server" {
+resource "aws_instance" "backend" {
   ami           = data.aws_ami.linux.id
-  instance_type = "t2.micro"
+  instance_type = var.ami_type
+  subnet_id     = aws_subnet.public.id
   tags = {
-    Name = var.instance_name
+    Name = "${var.environment}-backend"
   }
+
+  vpc_security_group_ids = [aws_security_group.backend.id]
+}
+
+resource "aws_instance" "frontend" {
+  ami           = data.aws_ami.linux.id
+  instance_type = var.ami_type
+  subnet_id     = aws_subnet.public.id
+  tags = {
+    Name = "${var.environment}-frontend"
+  }
+
+  vpc_security_group_ids = [aws_security_group.frontend.id]
 }
