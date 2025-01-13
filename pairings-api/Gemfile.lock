@@ -258,9 +258,12 @@ GEM
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.37.0)
       parser (>= 3.3.1.0)
-    rubocop-minitest (0.36.0)
-      rubocop (>= 1.61, < 2.0)
-      rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-pave (0.1.4)
+      rubocop (~> 1.36)
+      rubocop-performance
+      rubocop-rails
+      rubocop-rspec (~> 3.0.4)
+      rubocop-rspec_rails
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
@@ -269,11 +272,11 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.52.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails-omakase (1.0.0)
-      rubocop
-      rubocop-minitest
-      rubocop-performance
-      rubocop-rails
+    rubocop-rspec (3.0.5)
+      rubocop (~> 1.61)
+    rubocop-rspec_rails (2.30.0)
+      rubocop (~> 1.61)
+      rubocop-rspec (~> 3, >= 3.0.1)
     ruby-progressbar (1.13.0)
     rufus-scheduler (3.9.2)
       fugit (~> 1.1, >= 1.11.1)
@@ -354,7 +357,7 @@ DEPENDENCIES
   redis
   rspec-rails
   rubocop
-  rubocop-rails-omakase
+  rubocop-pave
   sidekiq
   sidekiq-scheduler
   solid_cable
