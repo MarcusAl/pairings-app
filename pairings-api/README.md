@@ -1,24 +1,59 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## System dependencies
 
-Things you may want to cover:
+Install ruby 3.4.1 with your package manager (mise is recommended)
 
-* Ruby version
+```
+brew install postgresql@14
+brew services start postgresql@14
+brew install redis
+brew services start redis
+brew services list
+```
 
-* System dependencies
+##Create a postgres user with password
 
-* Configuration
+```
+createuser -U postgres -d -R -S -P {{username}}
+```
 
-* Database creation
+OR
 
-* Database initialization
+```
+sudo -u postgres psql
 
-* How to run the test suite
+CREATE USER admin WITH PASSWORD 'your_password' CREATEDB;
+\q
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Gems setup
 
-* Deployment instructions
+```
+gem install rails
+gem install bundler
+bundle install
+```
 
-* ...
+## Env setup
+
+Update .env.development with your own values
+
+```
+cp .env.example .env.development
+```
+
+## Create db
+
+```
+rails db:create
+rails db:migrate
+rails db:seed
+```
+
+## Start server and sidekiq
+
+```
+rails s
+bundle exec sidekiq
+```
