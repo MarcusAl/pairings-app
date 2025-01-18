@@ -1,4 +1,4 @@
-require "sidekiq/pro/web"
+require 'sidekiq/web'
 require "sidekiq-scheduler/web"
 
 Sidekiq::Web.use(Rack::Auth::Basic) do |username, password|

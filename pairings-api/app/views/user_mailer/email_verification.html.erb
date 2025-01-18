@@ -1,0 +1,16 @@
+<h1>Verify your email</h1>
+
+<p>Welcome! Please verify your email by clicking the link below:</p>
+
+<p>
+  <%= link_to "Verify Email", 
+      identity_email_verification_url(
+        email_verification_token: @signed_id,
+        host: Rails.application.config.action_mailer.default_url_options[:host]
+      ) 
+  %>
+</p>
+
+<p>This link will expire automatically for security.</p>
+
+<p>If you didn't request this verification, you can safely ignore this email.</p>
