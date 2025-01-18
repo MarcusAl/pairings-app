@@ -16,7 +16,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ruby-3.4.1
+          ruby-version: .ruby-version
           bundler-cache: true
           working-directory: ./pairings-api
 
@@ -33,7 +33,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ruby-3.4.1
+          ruby-version: .ruby-version
           bundler-cache: true
           working-directory: ./pairings-api
 
@@ -69,7 +69,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: pairings-api/.ruby-version
+          ruby-version: .ruby-version
           bundler-cache: true
           working-directory: ./pairings-api
 
