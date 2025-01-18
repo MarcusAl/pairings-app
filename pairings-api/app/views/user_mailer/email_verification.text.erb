@@ -1,0 +1,12 @@
+Verify your email
+
+Welcome! Please verify your email by clicking the link below:
+
+<%= identity_email_verification_url(
+      email_verification_token: @signed_id,
+      host: Rails.application.config.action_mailer.default_url_options[:host]
+    ) %>
+
+This link will expire automatically for security.
+
+If you didn't request this verification, you can safely ignore this email.
