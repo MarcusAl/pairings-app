@@ -9,19 +9,21 @@ RSpec.describe 'passwords', type: :request do
     patch('Updates password') do
       security [bearer_auth: []]
       consumes 'application/json'
-      
-      parameter name: :params, in: :body, schema: {
-        type: :object,
-        properties: {
-          password: { type: :string },
-          password_confirmation: { type: :string },
-          password_challenge: { type: :string }
-        },
-        required: [:password, :password_confirmation]
-      }
+
+      parameter name: :params,
+                in: :body,
+                schema: {
+                  type: :object,
+                  properties: {
+                    password: { type: :string },
+                    password_confirmation: { type: :string },
+                    password_challenge: { type: :string }
+                  },
+                  required: %i[password password_confirmation]
+                }
 
       response(200, 'password updated') do
-        let(:session) { Session.create!(user: @user) }
+        let(:session)       { Session.create!(user: @user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
         let(:params) do
           {
@@ -87,7 +89,7 @@ RSpec.describe 'passwords', type: :request do
             password_confirmation: 'NewSecret1*3*5*'
           }
         end
-        
+
         run_test!
       end
     end

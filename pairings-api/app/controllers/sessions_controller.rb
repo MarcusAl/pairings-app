@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   skip_before_action :authenticate, only: :create
 
-  before_action :set_session, only: %i[ show ]
+  before_action :set_session, only: %i[show]
 
   def index
     render json: Current.user.sessions.order(created_at: :desc)
@@ -14,11 +14,11 @@ class SessionsController < ApplicationController
   def create
     if user = User.authenticate_by(session_params)
       @session = user.sessions.create!
-      response.set_header "X-Session-Token", @session.signed_id
+      response.set_header 'X-Session-Token', @session.signed_id
 
       render json: @session, status: :created
     else
-      render json: { error: "That email or password is incorrect" }, status: :unauthorized
+      render json: { error: 'That email or password is incorrect' }, status: :unauthorized
     end
   end
 

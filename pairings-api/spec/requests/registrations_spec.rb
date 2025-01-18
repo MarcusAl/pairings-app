@@ -5,14 +5,16 @@ RSpec.describe 'registrations', type: :request do
     post('Creates a user') do
       consumes 'application/json'
 
-      parameter name: :params, in: :body, schema: {
-        type: :object,
-        properties: {
-          email: { type: :string },
-          password: { type: :string }
-        },
-        required: [:email, :password]
-      }
+      parameter name: :params,
+                in: :body,
+                schema: {
+                  type: :object,
+                  properties: {
+                    email: { type: :string },
+                    password: { type: :string }
+                  },
+                  required: %i[email password]
+                }
 
       response(201, 'user created') do
         let(:params) { { email: 'test@example.com', password: 'Secret1*3*5*' } }
@@ -21,4 +23,3 @@ RSpec.describe 'registrations', type: :request do
     end
   end
 end
-

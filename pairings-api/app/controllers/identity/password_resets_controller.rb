@@ -24,13 +24,14 @@ class Identity::PasswordResetsController < ApplicationController
   end
 
   private
-    def set_user
-      @user = User.find_by_token_for!(:password_reset, params[:sid])
-    rescue StandardError
-      render json: { error: "That password reset link is invalid" }, status: :bad_request
-    end
 
-    def user_params
-      params.permit(:password, :password_confirmation)
-    end
+  def set_user
+    @user = User.find_by_token_for!(:password_reset, params[:sid])
+  rescue StandardError
+    render json: { error: 'That password reset link is invalid' }, status: :bad_request
+  end
+
+  def user_params
+    params.permit(:password, :password_confirmation)
+  end
 end
