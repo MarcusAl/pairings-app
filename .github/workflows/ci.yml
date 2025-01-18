@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ../../pairings-api/.ruby-version
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -31,7 +31,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ../../pairings-api/.ruby-version
           bundler-cache: true
 
       - name: Lint code for consistent style
@@ -56,11 +56,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: ../../pairings-api/.ruby-version
           bundler-cache: true
 
       - name: Run tests
         env:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test
+        run: ../../pairings-api/bin/rails db:test:prepare test
