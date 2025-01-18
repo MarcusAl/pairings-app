@@ -1,6 +1,6 @@
 ## Description
 
-<!-- Describe your changes in detail -->
+Please include a summary of the change.
 
 ## Type of Change
 
@@ -28,18 +28,6 @@
 
 <!-- If your PR includes application changes, complete this section -->
 
-### Added Resources
-
--
-
-### Modified Resources
-
--
-
-### Removed Resources
-
--
-
 ## Security Considerations
 
 <!-- List any security implications -->
@@ -48,18 +36,6 @@
 - [ ] IAM role changes
 - [ ] New credentials/secrets added
 - [ ] Network changes
-
-## Required Configuration
-
-<!-- List any new variables or configuration needed -->
-
-### Terraform Variables
-
--
-
-### Environment Variables
-
--
 
 ## Deployment Notes
 
@@ -71,9 +47,13 @@
 
 ## Checklist
 
-- [ ] My code follows the project's style guidelines
-- [ ] I have performed a self-review
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have updated the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] 💚 My code follows the project's style guidelines
+- [ ] 🧪 I have performed a self-review
+- [ ] 📖 I have commented my code, particularly in hard-to-understand areas
+- [ ] 📚 I have updated the documentation
+- [ ] 🚨 My changes generate no new warnings
+- [ ] 🧪 I have added tests that prove my fix is effective or that my feature works
+
+## TODOs
+
+- [x] No action to take.
