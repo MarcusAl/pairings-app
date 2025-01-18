@@ -1,22 +1,37 @@
 class SessionsController < ApplicationController
+  skip_before_action :authenticate, only: :create
+
+  before_action :set_session, only: %i[ show destroy ]
+
+  def index
+    render json: Current.user.sessions.order(created_at: :desc)
+  end
+
+  def show
+    render json: @session
+  end
+
   def create
-    @user = User.authenticate_by(user_params)
-    if @user&.present?
-      session[:user_id] = @user.id
-      render json: { user: @user }, status: :ok
+    if user = User.authenticate_by(session_params)
+      @session = user.sessions.create!
+      response.set_header "X-Session-Token", @session.signed_id
+
+      render json: @session, status: :created
     else
-      render json: { error: 'Invalid credentials' }, status: :unauthorized
+      render json: { error: "That email or password is incorrect" }, status: :unauthorized
     end
   end
 
   def destroy
-    session[:user_id] = nil
-    render json: { message: 'Logged out successfully' }, status: :ok
+    @session.destroy
   end
 
   private
+  def set_session
+    @session = Current.user.sessions.find(params[:id])
+  end
 
-  def user_params
-    params.require(:user).permit(:email, :password)
+  def session_params
+    params.require(:session).permit(:email, :password)
   end
 end

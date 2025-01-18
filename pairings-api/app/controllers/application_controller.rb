@@ -1,15 +1,20 @@
 class ApplicationController < ActionController::API
-  include ActionController::Cookies
-  
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+
+  before_action :set_current_request_details
+  before_action :authenticate
+
   private
-
-  def authenticate_user!
-    unless current_user
-      render json: { error: 'Unauthorized' }, status: :unauthorized
+    def authenticate
+      if session_record = authenticate_with_http_token { |token, _| Session.find_signed(token) }
+        Current.session = session_record
+      else
+        request_http_token_authentication
+      end
     end
-  end
 
-  def current_user
-    @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
-  end
+    def set_current_request_details
+      Current.user_agent = request.user_agent
+      Current.ip_address = request.ip
+    end
 end
