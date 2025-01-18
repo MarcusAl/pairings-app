@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   skip_before_action :authenticate, only: :create
 
-  before_action :set_session, only: %i[ show destroy ]
+  before_action :set_session, only: %i[ show ]
 
   def index
     render json: Current.user.sessions.order(created_at: :desc)
@@ -23,15 +23,20 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    @session.destroy
+    if Current.session&.destroy
+      head :ok
+    else
+      head :unprocessable_entity
+    end
   end
 
   private
+
   def set_session
     @session = Current.user.sessions.find(params[:id])
   end
 
   def session_params
-    params.require(:session).permit(:email, :password)
+    params.permit(:email, :password)
   end
 end

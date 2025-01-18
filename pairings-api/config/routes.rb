@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   post "sign_in", to: "sessions#create"
+  delete "sign_out", to: "sessions#destroy"
   post "sign_up", to: "registrations#create"
   resources :sessions, only: [:index, :show, :destroy]
   resource  :password, only: [:edit, :update]
@@ -14,9 +17,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  post '/login', to: 'sessions#create'
-  delete '/logout', to: 'sessions#destroy'
-
+  # Defines the root path route ("/")
   # Defines the root path route ("/")
   # root "posts#index"
   draw(:sidekiq)
