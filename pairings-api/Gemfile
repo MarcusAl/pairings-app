@@ -56,3 +56,5 @@ group :development, :test do
 end
 
 
+
+gem "authentication-zero", "~> 4.0"

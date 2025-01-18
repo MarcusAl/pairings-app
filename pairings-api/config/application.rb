@@ -14,8 +14,10 @@ module PairingsApi
 
     config.session_store :cookie_store, key: "_pairings_api_session", httponly: true
     config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use config.session_store, config.session_options
     config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
+    config.action_dispatch.cookies_same_site_protection = :strict
     config.active_job.queue_adapter = :sidekiq
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do

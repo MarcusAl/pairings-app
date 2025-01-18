@@ -80,6 +80,7 @@ GEM
       faraday (>= 1)
       faraday-multipart (>= 1)
     ast (2.4.2)
+    authentication-zero (4.0.3)
     base64 (0.2.0)
     bcrypt_pbkdf (1.1.1)
     benchmark (0.4.0)
@@ -363,6 +364,7 @@ PLATFORMS
 DEPENDENCIES
   annotate
   anthropic
+  authentication-zero (~> 4.0)
   bootsnap
   brakeman
   debug
