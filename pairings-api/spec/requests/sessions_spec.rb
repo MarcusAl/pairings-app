@@ -1,9 +1,7 @@
 require 'swagger_helper'
 
 RSpec.describe 'sessions', type: :request do
-  before do
-    @user = create(:user, :random_email)
-  end
+  let!(:user) { create(:user, :random_email) }
 
   path '/sign_in' do
     post('Creates a session') do
@@ -21,7 +19,7 @@ RSpec.describe 'sessions', type: :request do
                 }
 
       response(201, 'session created') do
-        let(:params) { { email: @user.email, password: 'Secret1*3*5*' } }
+        let(:params) { { email: user.email, password: 'Secret1*3*5*' } }
 
         run_test!
       end
@@ -38,14 +36,14 @@ RSpec.describe 'sessions', type: :request do
       security [bearer_auth: []]
 
       response(200, 'successful') do
-        let!(:other_session)   { Session.create!(user: @user) }
-        let!(:current_session) { Session.create!(user: @user) }
+        let!(:other_session)   { Session.create!(user: user) }
+        let!(:current_session) { Session.create!(user: user) }
         let(:Authorization)    { "Bearer #{current_session.signed_id}" }
 
         run_test! do
           expect(Session.exists?(current_session.id)).to be false
           expect(Session.exists?(other_session.id)).to be true
-          expect(@user.sessions.count).to eq(1)
+          expect(user.sessions.count).to eq(1)
         end
       end
 
@@ -63,7 +61,7 @@ RSpec.describe 'sessions', type: :request do
       security [bearer_auth: []]
 
       response(200, 'successful') do
-        let(:session)       { Session.create!(user: @user) }
+        let(:session)       { Session.create!(user: user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
 
         run_test!
@@ -80,7 +78,7 @@ RSpec.describe 'sessions', type: :request do
   path '/sessions/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
-    let!(:session)       { Session.create!(user: @user) }
+    let!(:session)       { Session.create!(user: user) }
     let!(:Authorization) { "Bearer #{session.signed_id}" }
 
     get('Shows a session') do

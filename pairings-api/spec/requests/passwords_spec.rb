@@ -1,9 +1,7 @@
 require 'swagger_helper'
 
 RSpec.describe 'passwords', type: :request do
-  before do
-    @user = create(:user, :random_email)
-  end
+  let!(:user) { create(:user, :random_email) }
 
   path '/password' do
     patch('Updates password') do
@@ -23,7 +21,7 @@ RSpec.describe 'passwords', type: :request do
                 }
 
       response(200, 'password updated') do
-        let(:session)       { Session.create!(user: @user) }
+        let(:session)       { Session.create!(user: user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
         let(:params) do
           {
@@ -35,13 +33,13 @@ RSpec.describe 'passwords', type: :request do
 
         run_test! do |response|
           expect(response.status).to eq(200)
-          @user.reload
-          expect(@user.authenticate('NewSecret1*3*5*')).to be_truthy
+          user.reload
+          expect(user.authenticate('NewSecret1*3*5*')).to be_truthy
         end
       end
 
       response(422, 'invalid parameters') do
-        let(:session) { Session.create!(user: @user) }
+        let(:session) { Session.create!(user: user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
 
         context 'when passwords do not match' do
