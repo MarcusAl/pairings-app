@@ -3,7 +3,7 @@ require 'securerandom'
 
 FactoryBot.define do
   factory :user do
-    email { Faker::Internet.email }
+    email { 'foo@bar.com' }
     password { 'Secret1*3*5*' }
     password_confirmation { password }
     verified { true }
