@@ -39,6 +39,9 @@ gem "thruster", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development do
   gem 'annotate'
   gem "authentication-zero", "~> 4.0"
@@ -48,8 +51,11 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem 'dotenv-rails'
-  gem 'rubocop'
+  gem 'rubocop', require: false
+  gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'faker'
+  gem 'rswag-specs'
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
@@ -58,3 +64,5 @@ end
 
 
 
+
+gem "factory_bot", "~> 6.5"
