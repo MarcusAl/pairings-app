@@ -1,0 +1,18 @@
+meta {
+  name: Creates a session
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/sign_in
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "emkay1993@gmail.com",
+    "password": "foobar123456"
+  }
+}

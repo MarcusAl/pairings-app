@@ -1,0 +1,19 @@
+meta {
+  name: Shows a session
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/sessions/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

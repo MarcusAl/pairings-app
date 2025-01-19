@@ -1,0 +1,18 @@
+meta {
+  name: Creates a user
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/sign_up
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "emkay1993@gmail.com",
+    "password": "foobar123456"
+  }
+}

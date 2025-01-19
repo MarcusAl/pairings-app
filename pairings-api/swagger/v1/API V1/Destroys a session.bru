@@ -1,0 +1,19 @@
+meta {
+  name: Destroys a session
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/sessions/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token}}
+}
