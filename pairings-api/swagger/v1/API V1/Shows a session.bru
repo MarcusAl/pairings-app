@@ -7,13 +7,9 @@ meta {
 get {
   url: {{baseUrl}}/sessions/:id
   body: none
-  auth: bearer
+  auth: inherit
 }
 
 params:path {
   id: 
-}
-
-auth:bearer {
-  token: {{token}}
 }
