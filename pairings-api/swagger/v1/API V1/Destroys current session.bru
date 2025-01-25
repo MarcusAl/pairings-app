@@ -1,0 +1,11 @@
+meta {
+  name: Destroys current session
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/sign_out
+  body: none
+  auth: inherit
+}

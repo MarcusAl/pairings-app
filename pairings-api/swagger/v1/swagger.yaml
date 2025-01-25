@@ -1,0 +1,129 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  '/password':
+    patch:
+      summary: Updates password
+      security:
+        - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: password updated
+        '422':
+          description: invalid parameters
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+                password_challenge:
+                  type: string
+              required:
+                - password
+                - password_confirmation
+  '/sign_up':
+    post:
+      summary: Creates a user
+      parameters: []
+      responses:
+        '201':
+          description: user created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+  '/sign_in':
+    post:
+      summary: Creates a session
+      parameters: []
+      responses:
+        '201':
+          description: session created
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+  '/sign_out':
+    delete:
+      summary: Destroys current session
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+  '/sessions':
+    get:
+      summary: Lists all sessions
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+  '/sessions/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Shows a session
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: Destroys a session
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearer_format: JWT
+servers:
+  - url: https://{defaultHost}
+    variables:
+      defaultHost:
+        default: localhost:3000

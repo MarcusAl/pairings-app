@@ -1,0 +1,18 @@
+meta {
+  name: Lists all sessions
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/sessions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "emkay1993@gmail.com",
+    "password": "foobar123456"
+  }
+}
