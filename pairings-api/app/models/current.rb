@@ -4,14 +4,6 @@ class Current < ActiveSupport::CurrentAttributes
   attribute :ip_address
   attribute :user
 
-  def user=(user)
-    super
-    self.session = nil
-  end
-
-  def session=(session)
-    super
-    self.user = session&.user
-  end
+  delegate :user, to: :session, allow_nil: true
 end
 

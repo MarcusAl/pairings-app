@@ -39,7 +39,7 @@ class SessionsController < ApplicationController
   private
 
   def set_session
-    @session = Current.user.sessions.find(params[:id])
+    @session = Session.find(params[:id])
   end
 
   def auth_params
