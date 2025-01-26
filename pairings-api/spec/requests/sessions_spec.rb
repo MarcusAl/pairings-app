@@ -1,7 +1,7 @@
 require 'swagger_helper'
 
 RSpec.describe 'sessions', type: :request do
-  let!(:user) { create(:user, :random_email) }
+  let!(:user) { create(:user) }
 
   path '/sign_in' do
     post('Creates a session') do

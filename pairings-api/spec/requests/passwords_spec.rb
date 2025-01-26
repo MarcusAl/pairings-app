@@ -1,7 +1,7 @@
 require 'swagger_helper'
 
 RSpec.describe 'passwords', type: :request do
-  let!(:user) { create(:user, :random_email) }
+  let!(:user) { create(:user) }
 
   path '/password' do
     patch('Updates password') do
