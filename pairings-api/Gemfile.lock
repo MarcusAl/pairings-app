@@ -44,6 +44,12 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
+    active_storage_validations (2.0.0)
+      activejob (>= 6.1.4)
+      activemodel (>= 6.1.4)
+      activestorage (>= 6.1.4)
+      activesupport (>= 6.1.4)
+      marcel (>= 1.0.3)
     activejob (8.0.1)
       activesupport (= 8.0.1)
       globalid (>= 0.3.6)
@@ -74,15 +80,29 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    annotate (2.6.5)
-      activerecord (>= 2.3.0)
-      rake (>= 0.8.7)
+    annotaterb (4.13.0)
     anthropic (0.3.2)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
       faraday-multipart (>= 1)
     ast (2.4.2)
     authentication-zero (4.0.3)
+    aws-eventstream (1.3.0)
+    aws-partitions (1.1042.0)
+    aws-sdk-core (3.217.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sdk-kms (1.97.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.178.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
+    aws-sigv4 (1.11.0)
+      aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
@@ -131,12 +151,14 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    i18n (1.14.6)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.0)
-    irb (1.14.3)
+    irb (1.15.1)
+      pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    jmespath (1.6.2)
     json (2.9.1)
     json-schema (5.1.1)
       addressable (~> 2.8)
@@ -176,7 +198,7 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-scp (4.0.0)
+    net-scp (4.1.0)
       net-ssh (>= 2.6.5, < 8.0.0)
     net-sftp (4.0.0)
       net-ssh (>= 5.0.0, < 8.0.0)
@@ -184,19 +206,19 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.18.1-aarch64-linux-gnu)
+    nokogiri (1.18.2-aarch64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.18.1-aarch64-linux-musl)
+    nokogiri (1.18.2-aarch64-linux-musl)
       racc (~> 1.4)
-    nokogiri (1.18.1-arm-linux-gnu)
+    nokogiri (1.18.2-arm-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.18.1-arm-linux-musl)
+    nokogiri (1.18.2-arm-linux-musl)
       racc (~> 1.4)
-    nokogiri (1.18.1-arm64-darwin)
+    nokogiri (1.18.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.1-x86_64-linux-gnu)
+    nokogiri (1.18.2-x86_64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.18.1-x86_64-linux-musl)
+    nokogiri (1.18.2-x86_64-linux-musl)
       racc (~> 1.4)
     ostruct (0.6.1)
     parallel (1.26.3)
@@ -204,6 +226,9 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
+    pp (0.6.2)
+      prettyprint
+    prettyprint (0.2.0)
     psych (5.2.3)
       date
       stringio
@@ -288,7 +313,7 @@ GEM
     rswag-ui (2.16.0)
       actionpack (>= 5.2, < 8.1)
       railties (>= 5.2, < 8.1)
-    rubocop (1.70.0)
+    rubocop (1.71.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -309,7 +334,7 @@ GEM
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails (2.29.0)
+    rubocop-rails (2.29.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.52.0, < 2.0)
@@ -323,7 +348,10 @@ GEM
     rufus-scheduler (3.9.2)
       fugit (~> 1.1, >= 1.11.1)
     securerandom (0.4.1)
-    sidekiq (7.3.7)
+    shoulda-matchers (6.4.0)
+      activesupport (>= 5.2.0)
+    sidekiq (7.3.8)
+      base64
       connection_pool (>= 2.3.0)
       logger
       rack (>= 2.2.4)
@@ -332,7 +360,7 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 6, < 8)
       tilt (>= 1.4.0, < 3)
-    solid_cable (3.0.5)
+    solid_cable (3.0.7)
       actioncable (>= 7.2)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -387,21 +415,23 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  annotate
+  active_storage_validations
+  annotaterb
   anthropic
   authentication-zero (~> 4.0)
-  bcrypt (~> 3.1.7)
+  aws-sdk-s3
+  bcrypt
   bootsnap
   brakeman
   debug
   dotenv-rails
-  factory_bot (~> 6.5)
+  factory_bot
   factory_bot_rails
   faker
   kamal
   pg
   puma (>= 5.0)
-  rails (~> 8.0.1)
+  rails (= 8.0.1)
   redis
   rspec-rails
   rswag-api
@@ -409,6 +439,7 @@ DEPENDENCIES
   rswag-ui
   rubocop
   rubocop-pave
+  shoulda-matchers (~> 6.0)
   sidekiq
   sidekiq-scheduler
   solid_cable

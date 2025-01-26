@@ -2,14 +2,14 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'pg'
-gem 'rails', '~> 8.0.1'
+gem "rails", "8.0.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 
 gem 'anthropic'
 
@@ -41,9 +41,16 @@ gem 'thruster', require: false
 gem 'rswag-api'
 gem 'rswag-ui'
 
+gem 'aws-sdk-s3', require: false
+gem 'active_storage_validations'
+
 group :development do
-  gem 'annotate'
   gem 'authentication-zero', '~> 4.0'
+  gem "annotaterb"
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 6.0'
 end
 
 group :development, :test do
@@ -61,4 +68,4 @@ group :development, :test do
   gem 'rubocop-pave', require: false
 end
 
-gem 'factory_bot', '~> 6.5'
+gem 'factory_bot'
