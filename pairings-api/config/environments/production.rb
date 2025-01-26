@@ -19,7 +19,9 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = :amazon
+  Rails.application.routes.default_url_options[:host] = ENV['APP_HOST']
+  config.active_storage.service_urls_expire_in = 1.hour
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
