@@ -42,6 +42,12 @@ RSpec.configure do |config|
     Rails.root.join('spec/fixtures')
   ]
 
+  config.after(:each) do
+    FileUtils.rm_rf(ActiveStorage::Blob.service.root)
+  end
+
+  config.include FactoryBot::Syntax::Methods
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -74,4 +80,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end
