@@ -5,3 +5,5 @@ require 'fileutils'
 unless File.exist?('config/prompts.yml')
   FileUtils.cp 'config/prompts.example.yml', 'config/prompts.yml'
 end
+
+puts "== CI setup complete =="
