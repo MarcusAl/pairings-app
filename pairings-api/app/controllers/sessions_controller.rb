@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   before_action :set_session, only: %i[show]
 
   def index
-    render json: Current.user.sessions.order(created_at: :desc)
+    render json: Current.user.sessions.active.order(created_at: :desc)
   end
 
   def show
@@ -16,7 +16,9 @@ class SessionsController < ApplicationController
 
   def create
     if user = User.authenticate_by(auth_params)
-      @session = user.sessions.create!
+      @session = user.sessions.create!(
+        expires_at: Session.generate_expiration
+      )
       response.set_header 'X-Session-Token', @session.signed_id
 
       render json: {
