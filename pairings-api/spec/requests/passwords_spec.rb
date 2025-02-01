@@ -21,7 +21,7 @@ RSpec.describe 'passwords', type: :request do
                 }
 
       response(200, 'password updated') do
-        let(:session)       { Session.create!(user: user) }
+        let(:session)       { create(:session, user: user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
         let(:params) do
           {
@@ -39,7 +39,7 @@ RSpec.describe 'passwords', type: :request do
       end
 
       response(422, 'invalid parameters') do
-        let(:session) { Session.create!(user: user) }
+        let(:session) { create(:session, user: user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
 
         context 'when passwords do not match' do

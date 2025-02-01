@@ -3,6 +3,7 @@
 # Table name: sessions
 #
 #  id         :uuid             not null, primary key
+#  expires_at :datetime         not null
 #  ip_address :string
 #  user_agent :string
 #  created_at :datetime         not null
@@ -21,8 +22,29 @@
 class Session < ApplicationRecord
   belongs_to :user
 
+  validates :expires_at, presence: true
+  validate :not_expired, if: -> { expires_at.present? }
+
+  scope :active, -> { where('expires_at > ?', Time.now) }
+
   before_create do
     self.user_agent = Current.user_agent
     self.ip_address = Current.ip_address
+  end
+
+  def self.generate_expiration
+    30.days.from_now
+  end
+
+  def expired?
+    expires_at < Time.current
+  end
+
+  private
+
+  def not_expired
+    if expired?
+      errors.add(:base, 'Session has expired')
+    end
   end
 end

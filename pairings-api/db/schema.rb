@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_26_142959) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_27_180636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -83,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_26_142959) do
     t.string "ip_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "expires_at", default: -> { "(CURRENT_TIMESTAMP + 'P45D'::interval)" }, null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
