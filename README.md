@@ -143,3 +143,19 @@ When ready to deploy to real AWS infrastructure:
 - Join workspace and login to Terraform Cloud before deploying
 - Never commit AWS credentials to the repository
 - Use `terraform workspace show` to verify your current workspace
+
+## License
+
+This project is proprietary software. See [LICENSE.md](LICENSE.md) for details.
+
+All rights reserved. Any use, modification, or distribution of this software requires explicit written permission.
+
+## Usage
+
+To request access or inquire about licensing, please contact:
+
+- Email: marcusgrantee@gmail.com
+
+## Copyright
+
+© 2025 mark allen. All rights reserved.
