@@ -1,0 +1,108 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"model":"claude-3-5-sonnet-20241022","system":"You are a culinary
+        chef with expertise in food, and a past history as a sommelier. You know what
+        food and wine compliment and pair well together. You are also an expert at
+        answering questions about food and cooking. When a user gives you an image,
+        you will create two items, item1 based on the image, and its attributes. Then
+        create item2 which is strictly a food or wine, that would pair well with item1.
+        Answer the question to the best of your knowledge. If you are not confident
+        in your answer based on your knowledge, you will try to find the answer. If
+        item_1 is wine or drink, item_2 will be a food. If item_1 is a food, item_2
+        will be a wine or drink. If the item_1 is not a food or wine, you will return
+        an error object, with no item_1 or item_2. If you do not know the answer you
+        will return an error object. Each item''s category will be one of the following:
+        main, side, dessert, drink, wine, beer, spirits, cider, tea, coffee, other.
+        Each item''s price range will be one of the following: $ (Budget friendly
+        (Under $15)), $$ (Moderate ($15-30)), $$$ (High-end ($30-60)), $$$$ (Luxury
+        ($60+)). Item 2 will have an image_url found on the internet, this should
+        be a real working image url, you should use unsplash.com or pixabay.com. Output
+        exactly two lines in the following format, with fields separated by |: name|description|category|subcategory|flavor_profiles|primary_flavor|price_range|cooking_method|texture
+        Baked salmon|A fillet of salmon...|main|fish|savory,fresh,herbal|citrus|$$$|pan-seared|tender
+        White wine|A full-bodied white wine...|wine|white wine|citrus,oak|citrus|$$$|Napa
+        Valley|2018\nThe first line must use data from item_1 (the item from the image).
+        The second line must use data from item_2 (the pairing suggestion). The data
+        I gave is only a suggestion, you should use your knowledge to create the best
+        possible pairing. Each field must be present and non-empty. flavor_profiles
+        should be comma-separated with no spaces. Description should be limited to
+        20 words, and have spaces after commas, or between words. Do not include any
+        other text in your response.","messages":[{"role":"user","content":[{"type":"image","source":{"type":"base64","media_type":"image/jpeg","data":"<ENCODED_IMAGE_DATA>"}},{"type":"text","text":"I
+        want you to create two items. item1 based on the image, and its attributes.
+        Then create item2 which will strictly be a food or wine that would pair well
+        with item1 in the provided JSON format. Only include JSON."}]}],"max_tokens":1000}'
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 01 Feb 2025 20:05:24 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Anthropic-Ratelimit-Requests-Limit:
+      - '50'
+      Anthropic-Ratelimit-Requests-Remaining:
+      - '49'
+      Anthropic-Ratelimit-Requests-Reset:
+      - '2025-02-01T20:05:22Z'
+      Anthropic-Ratelimit-Input-Tokens-Limit:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Remaining:
+      - '39000'
+      Anthropic-Ratelimit-Input-Tokens-Reset:
+      - '2025-02-01T20:05:24Z'
+      Anthropic-Ratelimit-Output-Tokens-Limit:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Remaining:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Reset:
+      - '2025-02-01T20:05:24Z'
+      Anthropic-Ratelimit-Tokens-Limit:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Remaining:
+      - '47000'
+      Anthropic-Ratelimit-Tokens-Reset:
+      - '2025-02-01T20:05:24Z'
+      Request-Id:
+      - req_01MKJ1ifKnMHjLq4QMXWEhjM
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 90b48e402c5eef3b-LHR
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01UAvgZeJy2SqgDTUX8SQ7bq","type":"message","role":"assistant","model":"claude-3-5-sonnet-20241022","content":[{"type":"text","text":"Herb-Crusted
+        Filet Mignon|Tender beef filet with rosemary, garlic roasted potatoes in a
+        red wine reduction|main|beef|savory,umami,herbal|pepper|$$$$|pan-seared|tender\nCabernet
+        Sauvignon|Full-bodied red wine with black fruit, tobacco, and subtle oak notes|wine|red
+        wine|black_cherry,tobacco,oak|black_cherry|$$$|aged|smooth"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":2183,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":111}}'
+  recorded_at: Sat, 01 Feb 2025 20:05:25 GMT
+recorded_with: VCR 6.3.1

@@ -46,3 +46,4 @@ terraform.rc
 **/._.DS_Store
 .AppleDouble
 .LSOverride
+pairings-api/config/prompts.yml

@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+
+# Copy example prompts file if prompts.yml doesn't exist
+unless File.exist?('config/prompts.yml')
+  FileUtils.cp 'config/prompts.example.yml', 'config/prompts.yml'
+end
+
+puts "== CI setup complete =="

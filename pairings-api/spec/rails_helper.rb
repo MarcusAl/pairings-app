@@ -10,6 +10,8 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 require 'sidekiq/testing'
+require 'vcr'
+
 Sidekiq::Testing.inline!
 
 # Add additional requires below this line. Rails is not loaded until this point!

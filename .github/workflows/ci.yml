@@ -49,6 +49,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup CI Configuration
+        working-directory: ./pairings-api
+        run: bin/setup_ci
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

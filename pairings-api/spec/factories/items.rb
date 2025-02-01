@@ -30,9 +30,9 @@ FactoryBot.define do
     association :user
     name { Faker::Food.dish }
     description { Faker::Food.description }
-    category { 'food' }
+    category { Item::CATEGORIES.keys.sample }
     subcategory { nil }
-    price_range { '$' }
+    price_range { Item::PRICE_RANGES.keys.sample }
     primary_flavor_profile { 'sweet' }
     flavor_profiles { ['sweet', 'salty'] }
     public { false }

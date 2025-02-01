@@ -33,8 +33,17 @@ class Item < ApplicationRecord
   has_many :pairings_as_item2, class_name: 'Pairing', foreign_key: 'item2_id'
   
   CATEGORIES = {
-    'food' => 'Food',
-    'drink' => 'Drink'
+    'main' => 'Main',
+    'side' => 'Side',
+    'dessert' => 'Dessert',
+    'drink' => 'Drink',
+    'wine' => 'Wine',
+    'beer' => 'Beer',
+    'spirits' => 'Spirits',
+    'cider' => 'Cider',
+    'tea' => 'Tea',
+    'coffee' => 'Coffee',
+    'other' => 'Other'
   }
 
   PRICE_RANGES = {

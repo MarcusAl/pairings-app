@@ -1,0 +1,15 @@
+claude:
+  version: '1.0'
+  message_with_image:
+    system: >-
+      System prompt here
+    messages:
+      - role: 'user'
+        content:
+          - type: 'image'
+            source:
+              type: 'base64'
+              media_type: 'image_media_type'
+              data: 'base64_image_string'
+          - type: 'text'
+            text: 'I want you to create two items. item1 based on the image, and its attributes. Then create item2 which will strictly be a food or wine that would pair well with item1 in the provided JSON format. Only include JSON.'
