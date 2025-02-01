@@ -6,6 +6,16 @@ View the interactive API documentation:
 
 [![API Documentation](https://img.shields.io/badge/API-Documentation-blue)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/marcusal/pairings-app/main/pairings-api/swagger/v1/swagger.yaml)
 
+Before running the application locally:
+
+1. Copy the example prompts file:
+
+```bash
+cp config/prompts.example.yml config/prompts.yml
+```
+
+2. Update `config/prompts.yml` with your actual prompts and configuration
+
 ## System dependencies
 
 Install ruby 3.4.1 with your package manager (mise is recommended)

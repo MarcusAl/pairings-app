@@ -43,6 +43,8 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Setup CI Configuration
+        run: bin/setup_ci
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config
 
