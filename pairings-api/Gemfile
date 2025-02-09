@@ -44,6 +44,9 @@ gem 'rswag-ui'
 gem 'aws-sdk-s3', require: false
 gem 'active_storage_validations'
 
+gem 'pagy', '~> 9.3'
+gem 'has_scope'
+
 group :development do
   gem 'authentication-zero', '~> 4.0'
   gem "annotaterb"
