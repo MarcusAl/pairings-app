@@ -4,17 +4,106 @@ info:
   title: API V1
   version: v1
 paths:
-  '/password':
+  "/items":
+    get:
+      summary: Lists items
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: by_category[category]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: by_flavor_profile[flavor_profile]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: search[query]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: visible_to[user_id]
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: filters by category
+        '401':
+          description: unauthorized
+    post:
+      summary: Creates an item
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: bad request
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+        required: true
+  "/items/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Shows an item
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+    patch:
+      summary: Updates an item
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '400':
+          description: bad request
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+    delete:
+      summary: Deletes an item
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+  "/password":
     patch:
       summary: Updates password
       security:
-        - bearer_auth: []
+      - bearer_auth: []
       parameters: []
       responses:
         '200':
           description: password updated
-        '422':
-          description: invalid parameters
+        '400':
+          description: bad request
         '401':
           description: unauthorized
       requestBody:
@@ -30,15 +119,17 @@ paths:
                 password_challenge:
                   type: string
               required:
-                - password
-                - password_confirmation
-  '/sign_up':
+              - password
+              - password_confirmation
+  "/sign_up":
     post:
       summary: Creates a user
       parameters: []
       responses:
         '201':
           description: user created
+        '400':
+          description: bad request
       requestBody:
         content:
           application/json:
@@ -50,9 +141,9 @@ paths:
                 password:
                   type: string
               required:
-                - email
-                - password
-  '/sign_in':
+              - email
+              - password
+  "/sign_in":
     post:
       summary: Creates a session
       parameters: []
@@ -72,50 +163,52 @@ paths:
                 password:
                   type: string
               required:
-                - email
-                - password
-  '/sign_out':
+              - email
+              - password
+  "/sign_out":
     delete:
       summary: Destroys current session
       security:
-        - bearer_auth: []
+      - bearer_auth: []
       responses:
         '200':
           description: successful
         '401':
-          description: unauthorized
-  '/sessions':
+          description: unauthorized with invalid token
+  "/sessions":
     get:
       summary: Lists all sessions
       security:
-        - bearer_auth: []
+      - bearer_auth: []
       responses:
         '200':
           description: successful
         '401':
           description: unauthorized
-  '/sessions/{id}':
+  "/sessions/{id}":
     parameters:
-      - name: id
-        in: path
-        description: id
-        required: true
-        schema:
-          type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
     get:
       summary: Shows a session
       security:
-        - bearer_auth: []
+      - bearer_auth: []
       responses:
         '200':
           description: successful
     delete:
       summary: Destroys a session
       security:
-        - bearer_auth: []
+      - bearer_auth: []
       responses:
         '200':
           description: successful
+        '401':
+          description: unauthorized with expired session
 components:
   securitySchemes:
     bearer_auth:
@@ -123,7 +216,7 @@ components:
       scheme: bearer
       bearer_format: JWT
 servers:
-  - url: https://{defaultHost}
-    variables:
-      defaultHost:
-        default: localhost:3000
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
