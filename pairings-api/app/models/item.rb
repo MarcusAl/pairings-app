@@ -90,6 +90,12 @@ class Item < ApplicationRecord
     end
   end
 
+  def as_json(options = {})
+    super(options).merge({
+      image_url: image_url
+    })
+  end
+
   private
 
   def flavor_profiles_include_primary
