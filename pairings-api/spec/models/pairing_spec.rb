@@ -3,6 +3,7 @@
 # Table name: pairings
 #
 #  id               :uuid             not null, primary key
+#  ai               :boolean          default(FALSE)
 #  ai_reasoning     :text
 #  confidence_score :float
 #  pairing_notes    :text

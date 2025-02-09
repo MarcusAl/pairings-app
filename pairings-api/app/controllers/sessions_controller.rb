@@ -4,14 +4,11 @@ class SessionsController < ApplicationController
   before_action :set_session, only: %i[show]
 
   def index
-    render json: Current.user.sessions.active.order(created_at: :desc)
+    render json: { data: current_user.sessions.active.order(created_at: :desc) }, status: :ok
   end
 
   def show
-    render json: {
-      session: @session,
-      access_token: @session.signed_id
-    }
+    render json: { data: @session }, status: :ok
   end
 
   def create
@@ -21,27 +18,27 @@ class SessionsController < ApplicationController
       )
       response.set_header 'X-Session-Token', @session.signed_id
 
-      render json: {
-        session: @session,
-        access_token: @session.signed_id
-      }, status: :created
+      render json: { data: @session }, status: :created
     else
       render json: { error: 'That email or password is incorrect' }, status: :unauthorized
     end
   end
 
   def destroy
-    if Current.session&.destroy
-      head :ok
-    else
-      head :unprocessable_entity
-    end
+    Current.session&.destroy
+
+    render json: { data: { message: 'Session destroyed' } }, status: :ok
+  rescue ActiveRecord::RecordNotDestroyed
+    render json: { error: 'Failed to destroy session' }, status: :unprocessable_entity
   end
 
   private
 
   def set_session
-    @session = Session.find(params[:id])
+    @session = current_user.sessions.find(params[:id])
+
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Session not found' }, status: :not_found 
   end
 
   def auth_params

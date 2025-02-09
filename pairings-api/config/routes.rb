@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   post "sign_up", to: "registrations#create"
   resources :sessions, only: [:index, :show, :destroy]
   resource  :password, only: [:edit, :update]
+  resources :items, only: [:index, :show, :create, :update, :destroy]
+  resources :pairings, only: [:index, :show, :create, :destroy]
   namespace :identity do
     resource :email,              only: [:edit, :update]
     resource :email_verification, only: [:show, :create]

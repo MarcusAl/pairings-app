@@ -23,8 +23,10 @@ RSpec.describe 'sessions', type: :request do
         let(:params) { { email: user.email, password: 'Secret1*3*5*' } }
 
         run_test! do
-          expect(JSON.parse(response.body)['session']).to include('expires_at')
+          body = JSON.parse(response.body)
+          expect(body['data']['id']).to eq(Session.last.id)
           expect(Session.last.expires_at).to be_within(1.second).of(30.days.from_now)
+          expect(body['data']['user_id']).to eq(user.id)
         end
       end
 
@@ -75,7 +77,7 @@ RSpec.describe 'sessions', type: :request do
         let(:Authorization) { "Bearer #{active_session.signed_id}" }
 
         run_test! do
-          sessions = JSON.parse(response.body)
+          sessions = JSON.parse(response.body)['data']
           expect(sessions.length).to eq(1)
           expect(sessions.first['id']).to eq(active_session.id)
         end
@@ -103,7 +105,10 @@ RSpec.describe 'sessions', type: :request do
         let(:id) { session.id }
 
         run_test! do
-          expect(JSON.parse(response.body)['session']).to include('expires_at')
+          body = JSON.parse(response.body)
+          expect(body['data']).to include('expires_at')
+          expect(body['data']['id']).to eq(session.id)
+          expect(body['data']['user_id']).to eq(user.id)
         end
       end
     end

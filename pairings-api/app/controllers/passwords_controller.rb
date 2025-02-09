@@ -1,19 +1,16 @@
 class PasswordsController < ApplicationController
-  before_action :set_user
-
   def update
-    if @user.update(user_params)
-      render json: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
+    current_user.update!(user_params)
+
+    render json: { data: current_user }, status: :ok
+
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Not Found' }, status: :not_found
+  rescue ActiveRecord::RecordInvalid, ActionController::ParameterMissing, ActiveRecord::NotNullViolation
+    render json: { error: 'Bad Request' }, status: :bad_request
   end
 
   private
-
-  def set_user
-    @user = Current.user
-  end
 
   def user_params
     params.permit(:password, :password_confirmation, :password_challenge).with_defaults(password_challenge: '')

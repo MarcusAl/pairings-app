@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_27_180636) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_09_124356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -71,6 +71,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_27_180636) do
     t.boolean "public", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "ai", default: false
     t.index ["item1_id", "item2_id", "user_id"], name: "index_pairings_on_item1_id_and_item2_id_and_user_id", unique: true
     t.index ["item1_id"], name: "index_pairings_on_item1_id"
     t.index ["item2_id"], name: "index_pairings_on_item2_id"

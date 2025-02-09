@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  include Pagy::Backend
 
   before_action :set_current_request_details
   before_action :authenticate
@@ -15,6 +16,10 @@ class ApplicationController < ActionController::API
     else
       request_http_token_authentication
     end
+  end
+
+  def current_user
+    Current.user
   end
 
   def set_current_request_details

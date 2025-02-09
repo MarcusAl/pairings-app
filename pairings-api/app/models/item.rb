@@ -29,8 +29,8 @@ class Item < ApplicationRecord
   belongs_to :user
   has_one_attached :image
   
-  has_many :pairings_as_item1, class_name: 'Pairing', foreign_key: 'item1_id'
-  has_many :pairings_as_item2, class_name: 'Pairing', foreign_key: 'item2_id'
+  has_many :pairings_as_item1, class_name: 'Pairing', foreign_key: 'item1_id', dependent: :destroy
+  has_many :pairings_as_item2, class_name: 'Pairing', foreign_key: 'item2_id', dependent: :destroy
   
   CATEGORIES = {
     'main' => 'Main',
@@ -88,6 +88,12 @@ class Item < ApplicationRecord
     when :local, :test
       Rails.application.routes.url_helpers.rails_blob_url(image)
     end
+  end
+
+  def as_json(options = {})
+    super(options).merge({
+      image_url: image_url
+    })
   end
 
   private

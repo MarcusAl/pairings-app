@@ -20,6 +20,11 @@ RSpec.describe 'registrations', type: :request do
         let(:params) { { email: 'test@example.com', password: 'Secret1*3*5*' } }
         run_test!
       end
+
+      response(400, 'bad request') do
+        let(:params) { { email: 'test@example.com' } }
+        run_test!
+      end
     end
   end
 end

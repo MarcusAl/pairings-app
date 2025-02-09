@@ -38,7 +38,7 @@ RSpec.describe 'passwords', type: :request do
         end
       end
 
-      response(422, 'invalid parameters') do
+      response(400, 'bad request') do
         let(:session) { create(:session, user: user) }
         let(:Authorization) { "Bearer #{session.signed_id}" }
 
