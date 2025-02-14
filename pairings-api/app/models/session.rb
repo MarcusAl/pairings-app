@@ -37,7 +37,7 @@ class Session < ApplicationRecord
   end
 
   def expired?
-    expires_at < Time.current
+    expires_at < Time.zone.now
   end
 
   private
