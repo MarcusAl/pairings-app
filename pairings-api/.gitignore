@@ -33,3 +33,4 @@
 /config/master.key
 /config/credentials.yml.enc
 /config/prompts.yml
+/config/auth0.yml

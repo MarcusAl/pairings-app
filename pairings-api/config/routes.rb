@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     resource :email_verification, only: [:show, :create]
     resource :password_reset,     only: [:new, :edit, :create, :update]
   end
+  get '/auth/auth0/callback' => 'auth0#callback'
+  get '/auth/failure' => 'auth0#failure'
+  get '/auth/logout' => 'auth0#logout'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

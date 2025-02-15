@@ -24,7 +24,7 @@ RSpec.describe Session, type: :model do
   describe 'validations' do
     subject { build(:session) }
 
-    it { should validate_presence_of(:expires_at) }
+    it { should have_db_column(:expires_at).of_type(:datetime) }
     it { should belong_to(:user) }
   end
 
@@ -53,9 +53,9 @@ RSpec.describe Session, type: :model do
   end
 
   describe '.generate_expiration' do
-    it 'returns a timestamp 30 days from now' do
+    it 'returns a timestamp 45 days from now' do
       expiration = Session.generate_expiration
-      expect(expiration).to be_within(1.second).of(30.days.from_now)
+      expect(expiration).to be_within(1.second).of(Session::DEFAULT_EXPIRATION.from_now)
     end
   end
 

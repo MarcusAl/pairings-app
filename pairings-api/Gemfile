@@ -47,6 +47,9 @@ gem 'active_storage_validations'
 gem 'pagy', '~> 9.3'
 gem 'has_scope'
 
+gem 'omniauth-auth0', '~> 3.0'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+
 group :development do
   gem 'authentication-zero', '~> 4.0'
   gem "annotaterb"
