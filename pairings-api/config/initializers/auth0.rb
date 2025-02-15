@@ -13,12 +13,12 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   )
 end
 
-# Allow both GET and POST methods for OmniAuth
+
 OmniAuth.config.silence_get_warning = true
 OmniAuth.config.request_validation_phase = nil
 OmniAuth.config.allowed_request_methods = [:post, :get]
 
-# Auth0 OmniAuth failure handling
+
 OmniAuth.config.on_failure = Proc.new { |env|
   Auth0Controller.action(:failure).call(env)
 }

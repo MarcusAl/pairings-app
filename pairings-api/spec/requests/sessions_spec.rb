@@ -25,7 +25,7 @@ RSpec.describe 'sessions', type: :request do
         run_test! do
           body = JSON.parse(response.body)
           expect(body['data']['id']).to eq(Session.last.id)
-          expect(Session.last.expires_at).to be_within(1.second).of(30.days.from_now)
+          expect(Session.last.expires_at).to be_within(1.second).of(Session::DEFAULT_EXPIRATION.from_now)
           expect(body['data']['user_id']).to eq(user.id)
         end
       end

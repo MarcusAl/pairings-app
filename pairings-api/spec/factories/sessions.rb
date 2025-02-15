@@ -21,7 +21,7 @@
 FactoryBot.define do
   factory :session do
     association :user
-    expires_at { 30.days.from_now }
+    expires_at { Session::DEFAULT_EXPIRATION.from_now }
     user_agent { 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)' }
     ip_address { '127.0.0.1' }
 

@@ -20,9 +20,9 @@
 #
 
 class Session < ApplicationRecord
+  DEFAULT_EXPIRATION = 45.days
   belongs_to :user
 
-  validates :expires_at, presence: true
   validate :not_expired, if: -> { expires_at.present? }
 
   scope :active, -> { where('expires_at > ?', Time.now) }
@@ -33,7 +33,7 @@ class Session < ApplicationRecord
   end
 
   def self.generate_expiration
-    30.days.from_now
+    DEFAULT_EXPIRATION.from_now
   end
 
   def expired?

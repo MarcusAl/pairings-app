@@ -4,19 +4,28 @@ class Auth0Controller < ApplicationController
   def callback
     auth_info = request.env['omniauth.auth']
     
-    user = User.find_or_initialize_by(email: auth_info.dig('info', 'email'))
-    user.password = SecureRandom.hex(20) if user.new_record?
-    user.save!
+    begin
+      ActiveRecord::Base.transaction do
+        user = User.find_or_initialize_by(email: auth_info.dig('info', 'email'))
+        user.password = SecureRandom.hex(20) if user.new_record?
+        user.save!
 
-    session = user.sessions.create!(expires_at: auth_info.dig('credentials', 'expires_at'))
-    
-    Current.session = session
-    Current.user = user
-    
-    render json: { 
-      token: session.signed_id,
-      user: user.as_json(only: [:id, :email])
-    }
+        session = user.sessions.create!
+      
+        Current.session = session
+        Current.user = user
+        
+        render json: { 
+          data: {
+            token: session.signed_id,
+            user: user.as_json(only: [:id, :email])
+          }
+        } and return
+      end
+    rescue StandardError => e
+      Rails.logger.error("Auth0 callback failed: #{e.message}")
+      redirect_to '/auth/failure', error: 'Authentication failed'
+    end
   end
 
   def failure
@@ -25,8 +34,25 @@ class Auth0Controller < ApplicationController
 
   def logout
     Current.session&.destroy
+
+    render json: {
+      data: {
+        logout_url: logout_url
+      }
+    }
   end
 
   def auth
+  end
+
+  private
+
+  def logout_url
+    request_params = {
+      returnTo: ENV['BASE_URL'],
+      client_id: ENV['AUTH0_CLIENT_ID']
+    }.to_s
+  
+    URI::HTTPS.build(host: ENV['AUTH0_DOMAIN'], path: '/v2/logout', query: request_params).to_s
   end
 end
