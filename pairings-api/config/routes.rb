@@ -1,18 +1,25 @@
 Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
+
   post "sign_in", to: "sessions#create"
   delete "sign_out", to: "sessions#destroy"
   post "sign_up", to: "registrations#create"
+
   resources :sessions, only: [:index, :show, :destroy]
+
   resource  :password, only: [:edit, :update]
+
   resources :items, only: [:index, :show, :create, :update, :destroy]
+
   resources :pairings, only: [:index, :show, :create, :destroy]
+
   namespace :identity do
     resource :email,              only: [:edit, :update]
     resource :email_verification, only: [:show, :create]
     resource :password_reset,     only: [:new, :edit, :create, :update]
   end
+
   get '/auth/auth0/callback' => 'auth0#callback'
   get '/auth/failure' => 'auth0#failure'
   get '/auth/logout' => 'auth0#logout'

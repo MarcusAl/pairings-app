@@ -16,7 +16,6 @@ gem 'anthropic'
 # Background processing
 gem 'redis'
 gem 'sidekiq'
-gem 'sidekiq-scheduler'
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem 'solid_cable'

@@ -49,6 +49,10 @@ RSpec.configure do |config|
     FileUtils.rm_rf(ActiveStorage::Blob.service.root)
   end
 
+  config.before(:each) do
+    ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+  end
+
   config.include FactoryBot::Syntax::Methods
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
