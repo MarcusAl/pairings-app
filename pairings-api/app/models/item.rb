@@ -53,6 +53,16 @@ class Item < ApplicationRecord
     '$$$$' => 'Luxury ($60+)'
   }
 
+  FIELDS = [
+    :name,
+    :description,
+    :category,
+    :subcategory,
+    :flavor_profiles,
+    :primary_flavor_profile,
+    :price_range
+  ].freeze
+
   validates :price_range, inclusion: { in: PRICE_RANGES.keys }, presence: true
   validates :image, content_type: { in: [:png, :jpeg], spoofing_protection: true }, size: { less_than: 5.megabytes }
   validates :name, presence: true
@@ -94,6 +104,33 @@ class Item < ApplicationRecord
     super(options).merge({
       image_url: image_url
     })
+  end
+
+  def attach_image_from_url(url)
+    return unless url.present?
+    
+    require 'open-uri'
+    begin
+      downloaded_image = URI.open(url)
+      content_type = downloaded_image.content_type
+      
+      extension = case content_type
+        when 'image/png' then '.png'
+        else '.jpg'
+      end
+
+      self.image.attach(
+        io: downloaded_image,
+        filename: "item_#{id}_#{Time.current.to_i}#{extension}",
+        content_type: content_type,
+        identify: true
+      )
+    rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout => e
+      raise e
+    rescue StandardError => e
+      errors.add(:image, "Failed to attach image from URL: #{e.message}")
+      false
+    end
   end
 
   private
