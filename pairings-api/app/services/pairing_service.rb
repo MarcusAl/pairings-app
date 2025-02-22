@@ -11,25 +11,25 @@ class PairingService
 
   require 'base64'
 
-  def self.call(image_id:)
-    new(image_id).call
+  def self.call(blob_image_id:)
+    new(blob_image_id).call
   end
 
-  def initialize(image_id)
-    @image_id = image_id
+  def initialize(blob_image_id)
+    @blob_image_id = blob_image_id
   end
 
   def call
     return unless blob_image
 
-    response = get_pairing
+    formatted_response = get_pairing
 
-    { success?: true, payload: response }
+    { success?: true, payload: formatted_response }
   end
 
   private
 
-  attr_reader :image_id
+  attr_reader :blob_image_id
 
   def get_pairing
     begin
@@ -52,7 +52,7 @@ class PairingService
   end
 
   def blob_image
-    @blob_image ||= ActiveStorage::Blob.find(image_id)
+    @blob_image ||= ActiveStorage::Blob.find(blob_image_id)
   end
 
   def client
@@ -74,15 +74,25 @@ class PairingService
 
   def parse_pairing_response(text_response)
     lines = text_response.split("\n").reject(&:empty?)
-    fields = [:name, :description, :category, :subcategory, :flavor_profiles, :primary_flavor, :price_range, :attributes, :texture]
     
     item1_values = lines[0].split('|').map(&:strip)
     item2_values = lines[1].split('|').map(&:strip)
     
     {
-      item_1: Hash[fields.zip(item1_values)].merge(flavor_profiles: item1_values[4].split(',')),
-      item_2: Hash[fields.zip(item2_values)].merge(flavor_profiles: item2_values[4].split(','))
-    }
+      item1: Hash[Item::FIELDS.zip(item1_values[0..6])].merge(
+        flavor_profiles: item1_values[4].split(',')
+      ),
+      item2: Hash[Item::FIELDS.zip(item2_values[0..6])].merge(
+        flavor_profiles: item2_values[4].split(',')
+      ),
+      image_url: item2_values[7],
+      pairing: {
+        confidence_score: item2_values[8].to_f,
+        ai_reasoning: item2_values[9],
+        pairing_notes: item2_values[10],
+        strength: item2_values[11].to_i
+      }
+    }.deep_symbolize_keys
   rescue StandardError => e
     raise ParseError, "Failed to parse response: #{e.message}"
   end
