@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   resources :items, only: [:index, :show, :create, :update, :destroy]
 
-  resources :pairings, only: [:index, :show, :create, :destroy]
+  resources :pairings, only: [:index, :show, :create, :update, :destroy]
 
   namespace :identity do
     resource :email,              only: [:edit, :update]
