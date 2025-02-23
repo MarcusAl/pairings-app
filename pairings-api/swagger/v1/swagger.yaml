@@ -10,29 +10,31 @@ paths:
       security:
       - bearer_auth: []
       parameters:
-      - name: by_category[category]
+      - name: by_category
         in: query
         required: false
         schema:
           type: string
-      - name: by_flavor_profile[flavor_profile]
+      - name: by_flavor_profile[]
+        in: query
+        items:
+          type: string
+        required: false
+        schema:
+          type: array
+      - name: search
         in: query
         required: false
         schema:
           type: string
-      - name: search[query]
-        in: query
-        required: false
-        schema:
-          type: string
-      - name: visible_to[user_id]
+      - name: visible_to
         in: query
         required: false
         schema:
           type: string
       responses:
         '200':
-          description: filters by category
+          description: filters by search
         '401':
           description: unauthorized
     post:
@@ -86,6 +88,123 @@ paths:
               type: string
     delete:
       summary: Deletes an item
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+  "/pairings":
+    get:
+      summary: Lists pairings
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: visible_to
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: by_strength
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: by_confidence
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: public_pairings
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: private_pairings
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: filters public pairings
+        '401':
+          description: unauthorized
+    post:
+      summary: Creates a pairing
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: pairing created
+        '422':
+          description: unprocessable entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item1_id:
+                  type: string
+                item2_id:
+                  type: string
+                strength:
+                  type: integer
+                confidence_score:
+                  type: number
+                public:
+                  type: boolean
+                pairing_notes:
+                  type: string
+              required:
+              - item1_id
+  "/pairings/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Shows a pairing
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+    patch:
+      summary: Updates a pairing
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '400':
+          description: bad request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                strength:
+                  type: integer
+                confidence_score:
+                  type: number
+                public:
+                  type: boolean
+                pairing_notes:
+                  type: string
+    delete:
+      summary: Deletes a pairing
       security:
       - bearer_auth: []
       responses:
