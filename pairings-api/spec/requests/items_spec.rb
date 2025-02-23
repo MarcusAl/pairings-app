@@ -4,7 +4,7 @@ RSpec.describe 'items', type: :request do
   let!(:user) { create(:user) }
   let!(:item) { create(:item, :with_image, user: user) }
   let!(:public_item) { create(:item, :public, :with_image, user: user) }
-  let!(:drink_item) { create(:item, :drink, :with_image, user: user) }
+  let!(:drink_item) { create(:item, :drink, :with_image, user: user, primary_flavor_profile: 'tangy', flavor_profiles: ['tangy']) }
   let!(:session) { create(:session, user: user) }
   let(:Authorization) { "Bearer #{session.signed_id}" }
 
@@ -12,10 +12,10 @@ RSpec.describe 'items', type: :request do
     get('Lists items') do
       security [bearer_auth: []]
       
-      parameter name: 'by_category[category]', in: :query, type: :string, required: false
-      parameter name: 'by_flavor_profile[flavor_profile]', in: :query, type: :string, required: false
-      parameter name: 'search[query]', in: :query, type: :string, required: false
-      parameter name: 'visible_to[user_id]', in: :query, type: :string, required: false
+      parameter name: 'by_category', in: :query, type: :string, required: false
+      parameter name: 'by_flavor_profile[]', in: :query, type: :array, items: { type: :string }, required: false
+      parameter name: 'search', in: :query, type: :string, required: false
+      parameter name: 'visible_to', in: :query, type: :string, required: false
       
       response(200, 'successful') do
         run_test! do
@@ -27,11 +27,40 @@ RSpec.describe 'items', type: :request do
       end
 
       response(200, 'filters by category') do
-        let(:'by_category[category]') { 'drink' }
+        let(:'by_category') { 'drink' }
         
         run_test! do
           body = JSON.parse(response.body)
           expect(body['data'].map { |i| i['category'] }.uniq).to eq(['drink'])
+        end
+      end
+
+      response(200, 'filters by flavor profile') do
+        let(:'by_flavor_profile[]') { ['sweet'] }
+        
+        run_test! do
+          body = JSON.parse(response.body)
+          expect(body['data'].map { |i| i['flavor_profiles'] }.uniq).to eq([['sweet', 'salty']])
+          expect(body['data'].count).to eq(2)
+        end
+      end
+
+      response(200, 'filters by visibility') do
+        let(:'visible_to') { user.id }
+        let!(:another_item) { create(:item) }
+        
+        run_test! do
+          body = JSON.parse(response.body)
+          expect(body['data'].count).to eq(3)
+        end
+      end
+
+      response(200, 'filters by search') do
+        let(:'search') { item.name.split(' ').first }
+        
+        run_test! do
+          body = JSON.parse(response.body)
+          expect(body['data'].count).to eq(1)
         end
       end
 
@@ -165,3 +194,4 @@ RSpec.describe 'items', type: :request do
     end
   end
 end
+

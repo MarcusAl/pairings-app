@@ -74,10 +74,13 @@ class Item < ApplicationRecord
   scope :public_items, -> { where(public: true) }
   scope :private_items, -> { where(public: false) }
   scope :by_category, -> (category) { where(category: category) }
-  scope :by_flavor_profile, -> (flavor_profile) { where('flavor_profiles @> ARRAY[?]::varchar[]', flavor_profile) }
+  scope :by_flavor_profile, -> (flavor_profile) {
+    profiles = Array(flavor_profile)
+    where('flavor_profiles @> ARRAY[?]::varchar[]', profiles)
+  }
   
-  scope :visible_to, ->(user) {
-    where('user_id = ? OR public = true', user.id)
+  scope :visible_to, ->(user_id) {
+    where('user_id = ? OR public = true', user_id)
   }
 
   scope :search, ->(query) {

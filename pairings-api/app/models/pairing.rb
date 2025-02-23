@@ -37,16 +37,16 @@ class Pairing < ApplicationRecord
   validates :confidence_score, inclusion: { in: 0..1 }, allow_nil: true
   validates :item1_id, uniqueness: { scope: [:item2_id, :user_id] }
 
-  scope :visible_to, ->(user) {
-    where('user_id = ? OR public = true', user.id)
+  scope :visible_to, ->(user_id) {
+    where('user_id = ? OR public = true', user_id)
   }
 
   scope :by_strength, ->(min_strength) {
-    where('strength >= ?', min_strength)
+    where('strength >= ?', min_strength.presence || 0)
   }
-
+  
   scope :by_confidence, ->(min_confidence) {
-    where('confidence_score >= ?', min_confidence)
+    where('confidence_score >= ?', min_confidence.presence || 0)
   }
 
   scope :public_pairings, -> { where(public: true) }

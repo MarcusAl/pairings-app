@@ -1,10 +1,10 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :destroy, :update]
 
-  has_scope :by_category, using: [:category], type: :hash
-  has_scope :by_flavor_profile, using: [:flavor_profile], type: :hash
-  has_scope :search, using: [:query], type: :hash
-  has_scope :visible_to, using: [:user_id], type: :hash
+  has_scope :by_category
+  has_scope :visible_to
+  has_scope :by_flavor_profile, type: :array
+  has_scope :search
 
   def index
     pagy, items = pagy(apply_scopes(current_user.items).order(created_at: :desc))
