@@ -1,10 +1,15 @@
 default: &default
-  client_id: <%= ENV.fetch("AUTH0_CLIENT_ID") %>
-  client_secret: <%= ENV.fetch("AUTH0_CLIENT_SECRET") %>
-  issuer_domain: <%= ENV.fetch("AUTH0_DOMAIN") %>
+  client_id: <%= ENV["AUTH0_CLIENT_ID"] %>
+  client_secret: <%= ENV["AUTH0_CLIENT_SECRET"] %>
+  issuer_domain: <%= ENV["AUTH0_DOMAIN"] %>
+
 development:
   <<: *default
+
 test:
   <<: *default
+
 production:
-  <<: *default
+  client_id: <%= Rails.application.credentials.dig(:auth0_client_id) %>
+  client_secret: <%= Rails.application.credentials.dig(:auth0_client_secret) %>
+  issuer_domain: <%= Rails.application.credentials.dig(:auth0_domain) %>

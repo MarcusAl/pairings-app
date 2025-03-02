@@ -1,0 +1,72 @@
+# This file and any secrets are not used for production deployment.
+# It is only used for local development, to emulate the production environment.
+
+# RAILS_MASTER_KEY=$(cat config/master.key) docker compose up -d
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: marcusal
+      POSTGRES_USER: admin
+      POSTGRES_DB: pairings_api_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  x-app: &api-template  # Base template for both services
+    image: marcusal93/pairings-api:v1.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://admin:marcusal@db:5432/pairings_api_production
+      - DATABASE_USERNAME=admin
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - DATABASE_PASSWORD=marcusal
+      - RAILS_ENV=production
+      - REDIS_URL=redis://redis:6379/1
+      - SIDEKIQ_ENABLED=true
+
+  pairings-api:
+    <<: *api-template
+    ports:
+      - "3000:80"
+    command: >
+      bash -c "
+        bin/rails db:exists && bin/rails db:migrate || bin/rails db:setup;
+        bin/rails server -p 80 -b 0.0.0.0
+      "
+    volumes:
+      - ./log:/rails/log
+
+  sidekiq:
+    <<: *api-template
+    command: >
+      bash -c "
+        bin/rails db:exists && bin/rails db:migrate || bin/rails db:setup;
+        bundle exec sidekiq -C config/sidekiq.yml
+      "
+    volumes:
+      - ./log:/rails/log
+
+volumes:
+  postgres_data:

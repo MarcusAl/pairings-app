@@ -49,10 +49,10 @@ class Auth0Controller < ApplicationController
 
   def logout_url
     request_params = {
-      returnTo: ENV['BASE_URL'],
-      client_id: ENV['AUTH0_CLIENT_ID']
+      returnTo: ENV['BASE_URL'] || Rails.application.credentials.base_url,
+      client_id: ENV['AUTH0_CLIENT_ID'] || Rails.application.credentials.auth0_client_id
     }.to_s
   
-    URI::HTTPS.build(host: ENV['AUTH0_DOMAIN'], path: '/v2/logout', query: request_params).to_s
+    URI::HTTPS.build(host: ENV['AUTH0_DOMAIN'] || Rails.application.credentials.auth0_domain, path: '/v2/logout', query: request_params).to_s
   end
 end

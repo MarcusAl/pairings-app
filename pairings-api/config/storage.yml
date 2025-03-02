@@ -10,13 +10,13 @@ test:
 
 amazon:
   service: S3
-  access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
-  secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
-  region: <%= ENV['AWS_REGION'] %>
-  bucket: <%= ENV['AWS_BUCKET'] %>
-  retry_limit: <%= ENV['AWS_RETRY_LIMIT'].to_i %>
-  http_open_timeout: <%= ENV['AWS_HTTP_OPEN_TIMEOUT'].to_i %>
-  http_read_timeout: <%= ENV['AWS_HTTP_READ_TIMEOUT'].to_i %>
+  access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
+  region: <%= Rails.application.credentials.dig(:aws, :region) %>
+  bucket: <%= Rails.application.credentials.dig(:aws, :bucket) %>
+  retry_limit: <%= Rails.application.credentials.dig(:aws, :retry_limit).to_i %>
+  http_open_timeout: <%= Rails.application.credentials.dig(:aws, :http_open_timeout).to_i %>
+  http_read_timeout: <%= Rails.application.credentials.dig(:aws, :http_read_timeout).to_i %>
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS

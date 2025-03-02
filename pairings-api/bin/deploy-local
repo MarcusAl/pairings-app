@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# run chmod +x bin/deploy-local
+set -e
+
+# Colours
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Error handling
+handle_error() {
+  echo -e "${RED}❌ Error: $1${NC}"
+  exit 1
+}
+
+echo -e "${BLUE}🔨 Building image...${NC}"
+docker build -t pairings-api:v1.0.0 . || handle_error "Build failed"
+
+echo -e "${BLUE}🏷️  Tagging image...${NC}"
+docker tag pairings-api:v1.0.0 marcusal93/pairings-api:v1.0.0 || handle_error "Tagging failed"
+
+echo -e "${YELLOW}⬆️  Pushing to registry...${NC}"
+docker push marcusal93/pairings-api:v1.0.0 || handle_error "Push failed"
+
+echo -e "${YELLOW}🔄 Restarting containers...${NC}"
+export RAILS_MASTER_KEY=$(cat config/master.key)
+docker compose down || handle_error "Docker compose down failed"
+docker compose pull || handle_error "Docker compose pull failed"
+docker compose up -d || handle_error "Docker compose up failed"
+
+echo -e "${GREEN}✅ Deployment complete!${NC}"
