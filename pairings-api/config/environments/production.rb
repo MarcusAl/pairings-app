@@ -37,7 +37,7 @@ Rails.application.configure do
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
+  config.log_level = ENV["RAILS_LOG_LEVEL"] || "info"
 
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
@@ -47,8 +47,9 @@ Rails.application.configure do
 
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :redis_cache_store, {
-    url: ENV.fetch('REDIS_URL', 'redis://redis:6379/1'),
-    pool_size: ENV.fetch('RAILS_MAX_THREADS', 5),
+    url: ENV["REDIS_URL"] || "redis://redis:6379/1",
+    ssl_params: {verify_mode: OpenSSL::SSL::VERIFY_NONE},
+    pool_size: ENV["RAILS_MAX_THREADS"] || 5,
     pool_timeout: 5
   }
 
