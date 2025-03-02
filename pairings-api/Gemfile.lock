@@ -160,6 +160,8 @@ GEM
       activesupport (>= 5.2)
     hashdiff (1.1.2)
     hashie (5.0.0)
+    hiredis-client (0.23.2)
+      redis-client (= 0.23.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.0)
@@ -472,6 +474,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   has_scope
+  hiredis-client
   kamal
   omniauth-auth0 (~> 3.0)
   omniauth-rails_csrf_protection (~> 1.0)

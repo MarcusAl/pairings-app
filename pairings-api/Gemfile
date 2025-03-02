@@ -15,6 +15,7 @@ gem 'anthropic'
 
 # Background processing
 gem 'redis'
+gem 'hiredis-client'
 gem 'sidekiq'
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable

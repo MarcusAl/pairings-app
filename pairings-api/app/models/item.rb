@@ -26,6 +26,9 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Item < ApplicationRecord
+  class ImageDownloadError < StandardError; end
+  class ImageAttachmentError < StandardError; end
+
   belongs_to :user
   has_one_attached :image
   
@@ -128,11 +131,14 @@ class Item < ApplicationRecord
         content_type: content_type,
         identify: true
       )
-    rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout => e
-      raise e
+    rescue OpenURI::HTTPError => e
+      raise ImageDownloadError, "HTTP error downloading image (#{e.message})"
+    rescue URI::InvalidURIError => e
+      raise ImageDownloadError, "Invalid URL format (#{e.message})"
+    rescue ActiveStorage::IntegrityError => e
+      raise ImageProcessingError, "File integrity error (#{e.message})"
     rescue StandardError => e
-      errors.add(:image, "Failed to attach image from URL: #{e.message}")
-      false
+      raise ImageProcessingError, "Unexpected error processing image (#{e.message})"
     end
   end
 

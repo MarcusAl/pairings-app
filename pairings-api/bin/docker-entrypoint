@@ -1,4 +1,9 @@
 #!/bin/bash -e
+set -e
+
+# Remove any existing server.pid or sidekiq.pid
+rm -f /rails/tmp/pids/server.pid
+rm -f /rails/tmp/pids/sidekiq.pid
 
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
@@ -6,9 +11,30 @@ if [ -z "${LD_PRELOAD+x}" ]; then
     export LD_PRELOAD
 fi
 
+# Wait for PostgreSQL if DATABASE_URL is set
+if [ -n "$DATABASE_URL" ]; then
+    until pg_isready -h "${DATABASE_HOST:-$(echo $DATABASE_URL | awk -F[@/] '{print $4}')}" -q; do
+        echo "Waiting for PostgreSQL to become available..."
+        sleep 2
+    done
+fi
+
+# Wait for Redis if REDIS_URL is set
+if [ -n "$REDIS_URL" ]; then
+    until redis-cli -u "$REDIS_URL" ping &>/dev/null; do
+        echo "Waiting for Redis to become available..."
+        sleep 2
+    done
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+    ./bin/rails db:prepare
+fi
+
+# Start Sidekiq if SIDEKIQ_ENABLED is true and we're running the server
+if [ "${SIDEKIQ_ENABLED}" = "true" ] && [ "${@: -1:1}" == "server" ]; then
+    bundle exec sidekiq -C config/sidekiq.yml &
 fi
 
 exec "${@}"
