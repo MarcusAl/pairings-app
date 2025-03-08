@@ -74,6 +74,14 @@ rails s
 bundle exec sidekiq
 ```
 
+## Docker
+
+cd into Rails project and run
+
+```
+bin/deploy-local
+```
+
 ## Terraform Development Workflow
 
 This project uses LocalStack for local development and Terraform Cloud for production deployment.
@@ -126,15 +134,18 @@ When ready to deploy to real AWS infrastructure:
    terraform state rm $(terraform state list)
    ```
 
+   Change backend security group to allow SSH access from your IP
+
 3. Initialize and apply with regular Terraform commands:
 
    ```bash
+   cd terraform-setup
    terraform init
-   terraform plan
+   terraform plan -var="db_username=someusername" -var="db_password=somepassword" -var="rails_master_key=$(cat ../pairings-api/config/master.key)" -var="ecr_image_url=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/pairings-api:v1.0.0" -var="ssh_public_key=$(cat ~/.ssh/aws-deployer.pub)" -var="environment=production"
 
    (confirm changes)
 
-   terraform apply
+   terraform apply -var="db_username=someusername" -var="db_password=somepassword" -var="rails_master_key=$(cat ../pairings-api/config/master.key)" -var="ecr_image_url=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/pairings-api:v1.0.0" -var="ssh_public_key=$(cat ~/.ssh/aws-deployer.pub)" -var="environment=production"
    ```
 
 4. After deployment, revert any changes to continue local development:
