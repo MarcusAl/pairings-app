@@ -31,21 +31,21 @@ bin/sidekiq
 
 Cd into Rails project and run one of the following commands:
 
-# Option 1: Use environment variable
+### Option 1: Use environment variable
 
 ```
 export AWS_ACCOUNT_ID={YOUR_AWS_ACCOUNT_ID}
 ./bin/start-local
 ```
 
-# Option 2: Let the script prompt you
+### Option 2: Let the script prompt you
 
 ```
 ./bin/start-local
 # It will ask for your AWS Account ID
 ```
 
-# Option 3: Start with temporary environment variable
+### Option 3: Start with temporary environment variable
 
 ```
 AWS_ACCOUNT_ID={YOUR_AWS_ACCOUNT_ID} ./bin/start-local
