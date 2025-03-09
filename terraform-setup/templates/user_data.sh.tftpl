@@ -1,0 +1,93 @@
+#!/bin/bash
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+echo "Starting user data script..."
+
+# Install dependencies
+echo "Installing AWS CLI and Docker..."
+sudo yum update -y
+sudo yum install -y aws-cli docker
+
+echo "Starting Docker service..."
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -a -G docker ec2-user
+
+# Login to ECR
+echo "Logging into ECR..."
+aws ecr get-login-password \
+  --region ${aws_region} | \
+  sudo docker login \
+  --username AWS \
+  --password-stdin \
+  ${aws_account_id}.dkr.ecr.${aws_region}.amazonaws.com
+
+echo "Creating shared network..."
+sudo docker network create pairings-network
+
+echo "Creating log directory..."
+sudo mkdir -p /var/log/pairings-api
+sudo chown 1000:1000 /var/log/pairings-api
+
+echo "Fetching Rails master key..."
+RAILS_MASTER_KEY=$(aws ssm get-parameter \
+  --region ${aws_region} \
+  --name "/${environment}/rails/master_key" \
+  --with-decryption \
+  --query Parameter.Value \
+  --output text || echo "Failed to fetch master key")
+
+if [ -z "$RAILS_MASTER_KEY" ]; then
+  echo "Error: Failed to fetch RAILS_MASTER_KEY"
+  exit 1
+fi
+
+# URL encode the password
+DB_PASSWORD=$(echo '${db_password}' | sed 's/#/%23/g; s/\$/%24/g')
+
+# Get Redis endpoint
+REDIS_ENDPOINT="${redis_endpoint}"
+echo "Redis endpoint: $REDIS_ENDPOINT"
+
+echo "Running Rails container..."
+sudo docker run -d \
+  --name pairings-api \
+  --network pairings-network \
+  -p 3000:3000 \
+  -e RAILS_ENV=production \
+  -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY \
+  -e DATABASE_URL="postgresql://${db_username}:$DB_PASSWORD@${db_endpoint}/${db_name}?sslmode=require" \
+  -e REDIS_URL="redis://$REDIS_ENDPOINT:6379/1" \
+  -e SIDEKIQ_ENABLED=true \
+  ${ecr_image_url} \
+  bin/rails server -p 3000 -b 0.0.0.0
+
+echo "Running Sidekiq container..."
+sudo docker run -d \
+  --name pairings-api-sidekiq \
+  --network pairings-network \
+  -e RAILS_ENV=production \
+  -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY \
+  -e DATABASE_URL="postgresql://${db_username}:$DB_PASSWORD@${db_endpoint}/${db_name}?sslmode=require" \
+  -e REDIS_URL="redis://$REDIS_ENDPOINT:6379/1" \
+  -e SIDEKIQ_ENABLED=true \
+  ${ecr_image_url} \
+  bundle exec sidekiq -C config/sidekiq.yml
+
+# Create and set permissions for log directories
+echo "Setting up log directories..."
+sudo docker exec pairings-api mkdir -p /rails/log
+sudo docker exec pairings-api touch /rails/log/production.log
+sudo docker exec pairings-api chown -R rails:rails /rails/log
+
+sudo docker exec pairings-api-sidekiq mkdir -p /rails/log
+sudo docker exec pairings-api-sidekiq touch /rails/log/sidekiq.log
+sudo docker exec pairings-api-sidekiq chown -R rails:rails /rails/log
+
+echo "Waiting for services to be ready..."
+sleep 40
+
+echo "Running database setup..."
+sudo docker exec pairings-api bin/rails db:prepare
+
+echo "User data script completed."

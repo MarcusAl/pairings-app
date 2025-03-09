@@ -19,6 +19,28 @@ provider "aws" {
   region = var.aws_region
 }
 
+# Redis subnet group
+resource "aws_elasticache_subnet_group" "redis" {
+  name       = "${var.environment}-redis-subnet-group"
+  subnet_ids = [aws_subnet.private.id]
+}
+
+# Redis cluster
+resource "aws_elasticache_cluster" "redis" {
+  cluster_id         = "${var.environment}-redis"
+  engine             = "redis"
+  node_type          = "cache.t3.micro"
+  num_cache_nodes    = 1
+  port               = 6379
+  security_group_ids = [aws_security_group.redis.id]
+  subnet_group_name  = aws_elasticache_subnet_group.redis.name
+
+  tags = {
+    Name        = "${var.environment}-redis"
+    Environment = var.environment
+  }
+}
+
 data "aws_ami" "amazon_linux_2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -101,9 +123,11 @@ resource "aws_db_instance" "postgres" {
   allocated_storage     = 50
   max_allocated_storage = 100
 
-  db_name  = "pairings_api_production"
-  username = var.db_username
-  password = var.db_password
+  db_name             = "pairings_api_production"
+  username            = var.db_username
+  password            = var.db_password
+  publicly_accessible = false
+  port                = 5432
 
   vpc_security_group_ids = [aws_security_group.database.id]
   db_subnet_group_name   = aws_db_subnet_group.main.name
@@ -112,6 +136,8 @@ resource "aws_db_instance" "postgres" {
   final_snapshot_identifier = "${var.environment}-postgres-final-snapshot-${formatdate("YYYY-MM-DD-HH-mm", timestamp())}" # Snapshot name must be unique
 
   apply_immediately = true
+
+  parameter_group_name = "default.postgres15"
 
   tags = {
     Name        = "${var.environment}-postgres"
@@ -126,65 +152,17 @@ resource "aws_instance" "backend" {
   subnet_id     = aws_subnet.public.id
   key_name      = aws_key_pair.deployer.key_name
 
-  user_data = <<-EOF
-              #!/bin/bash
-              exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-              
-              echo "Starting user data script..."
-              
-              # Install dependencies
-              echo "Installing AWS CLI and Docker..."
-              sudo yum update -y
-              sudo yum install -y aws-cli docker
-              
-              echo "Starting Docker service..."
-              sudo systemctl enable docker
-              sudo systemctl start docker
-              sudo usermod -a -G docker ec2-user
-              
-              # Login to ECR - Fixed command
-              echo "Logging into ECR..."
-              aws ecr get-login-password \
-                --region ${var.aws_region} | \
-                sudo docker login \
-                --username AWS \
-                --password-stdin \
-                ${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com
-              
-              echo "Fetching Rails master key..."
-              RAILS_MASTER_KEY=$(aws ssm get-parameter \
-                --region ${var.aws_region} \
-                --name "/${var.environment}/rails/master_key" \
-                --with-decryption \
-                --query Parameter.Value \
-                --output text || echo "Failed to fetch master key")
-              
-              if [ -z "$RAILS_MASTER_KEY" ]; then
-                echo "Error: Failed to fetch RAILS_MASTER_KEY"
-                exit 1
-              fi
-              
-              echo "Pulling Docker image..."
-              sudo docker pull ${var.ecr_image_url}
-              
-              echo "Running Docker container..."
-              sudo docker run -d \
-                --name pairings-api \
-                -p 3000:3000 \
-                -e RAILS_ENV=production \
-                -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY \
-                -e DATABASE_URL="postgres://${var.db_username}:${var.db_password}@${aws_db_instance.postgres.endpoint}/${aws_db_instance.postgres.db_name}" \
-                ${var.ecr_image_url}
-              
-              # Wait for container to be ready
-              echo "Waiting for container to be ready..."
-              sleep 40
-              
-              echo "Running database migrations..."
-              sudo docker exec pairings-api bin/rails db:migrate
-              
-              echo "User data script completed."
-              EOF
+  user_data = templatefile("${path.module}/templates/user_data.sh.tftpl", {
+    aws_region     = var.aws_region
+    aws_account_id = var.aws_account_id
+    environment    = var.environment
+    db_username    = var.db_username
+    db_password    = var.db_password
+    ecr_image_url  = var.ecr_image_url
+    redis_endpoint = aws_elasticache_cluster.redis.cache_nodes[0].address
+    db_endpoint    = aws_db_instance.postgres.endpoint
+    db_name        = aws_db_instance.postgres.db_name
+  })
 
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 

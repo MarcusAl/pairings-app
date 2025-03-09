@@ -16,14 +16,66 @@ handle_error() {
   exit 1
 }
 
-echo -e "${BLUE}🔨 Building image...${NC}"
-docker build -t pairings-api:v1.0.0 . || handle_error "Build failed"
+# Detect architecture or ask user
+detect_architecture() {
+  local arch=$(uname -m)
+  case $arch in
+    "x86_64")
+      echo "amd64"
+      ;;
+    "arm64" | "aarch64")
+      echo "arm64"
+      ;;
+    *)
+      echo -e "${YELLOW}⚠️  Unknown architecture: $arch${NC}"
+      echo -e "${BLUE}Please select your architecture:${NC}"
+      select arch_choice in "amd64" "arm64"; do
+        case $arch_choice in
+          "amd64"|"arm64")
+            echo "$arch_choice"
+            break
+            ;;
+          *)
+            echo -e "${RED}Invalid choice. Please select 1 for amd64 or 2 for arm64${NC}"
+            ;;
+        esac
+      done
+      ;;
+  esac
+}
+
+# Check for AWS Account ID
+if [ -z "$AWS_ACCOUNT_ID" ]; then
+  echo -e "${YELLOW}AWS_ACCOUNT_ID not found in environment.${NC}"
+  echo -e "${BLUE}Please enter your AWS Account ID:${NC}"
+  read -r input_account_id
+  
+  if [ -z "$input_account_id" ]; then
+    handle_error "No AWS Account ID provided. Please set AWS_ACCOUNT_ID environment variable or enter it when prompted."
+  fi
+  
+  # Validate AWS Account ID format (12 digits)
+  if ! [[ $input_account_id =~ ^[0-9]{12}$ ]]; then
+    handle_error "Invalid AWS Account ID format. Must be 12 digits."
+  fi
+  
+  AWS_ACCOUNT_ID=$input_account_id
+fi
+
+# Get architecture
+ARCH=$(detect_architecture)
+VERSION="v1.0.0"
+IMAGE_NAME="pairings-api"
+ECR_REPO="${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com"
+
+echo -e "${BLUE}🔨 Building image for $ARCH...${NC}"
+docker build --platform linux/$ARCH -t $IMAGE_NAME:$ARCH-$VERSION . || handle_error "Build failed"
 
 echo -e "${BLUE}🏷️  Tagging image...${NC}"
-docker tag pairings-api:v1.0.0 marcusal93/pairings-api:v1.0.0 || handle_error "Tagging failed"
+docker tag $IMAGE_NAME:$ARCH-$VERSION $ECR_REPO/$IMAGE_NAME:$ARCH-$VERSION || handle_error "Tagging failed"
 
 echo -e "${YELLOW}⬆️  Pushing to registry...${NC}"
-docker push marcusal93/pairings-api:v1.0.0 || handle_error "Push failed"
+docker push $ECR_REPO/$IMAGE_NAME:$ARCH-$VERSION || handle_error "Push failed"
 
 echo -e "${YELLOW}🔄 Restarting containers...${NC}"
 export RAILS_MASTER_KEY=$(cat config/master.key)
@@ -31,4 +83,4 @@ docker compose down || handle_error "Docker compose down failed"
 docker compose pull || handle_error "Docker compose pull failed"
 docker compose up -d || handle_error "Docker compose up failed"
 
-echo -e "${GREEN}✅ Deployment complete!${NC}"
+echo -e "${GREEN}✅ Deployment complete for $ARCH architecture!${NC}"

@@ -2,6 +2,7 @@ redis_config = { url: ENV['REDIS_URL'] || 'redis://redis:6379/1', ssl_params: {v
 
 Sidekiq.configure_server do |config|
   config.redis = redis_config
+  config.logger = Logger.new('log/sidekiq.log')
 end
 
 Sidekiq.configure_client do |config|

@@ -83,3 +83,22 @@ resource "aws_security_group" "database" {
     Environment = var.environment
   }
 }
+
+resource "aws_security_group" "redis" {
+  name        = "${var.environment}-redis-sg"
+  description = "Security group for Redis"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description     = "Redis access from backend"
+    from_port       = 6379
+    to_port         = 6379
+    protocol        = "tcp"
+    security_groups = [aws_security_group.backend.id]
+  }
+
+  tags = {
+    Name        = "${var.environment}-redis-sg"
+    Environment = var.environment
+  }
+}
