@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Store the variables
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export AWS_REGION=$(aws configure get region)
+
+# Tag your existing image (replace with your actual image name)
+docker tag marcusal93/pairings-api:v1.0.0 ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/pairings-api:v1.0.0
+
+# Log in to ECR
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+# Push the image
+docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/pairings-api:v1.0.0
+
+# aws ecr describe-images --repository-name pairings-api

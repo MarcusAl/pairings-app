@@ -1,6 +1,6 @@
 # Test instances
 # resource "aws_instance" "test_frontend" {
-#   ami           = data.aws_ami.linux.id
+#   ami           = data.aws_ami.amazon_linux_2023.id
 #   instance_type = var.ami_type
 
 #   vpc_security_group_ids = [aws_security_group.frontend.id]
@@ -12,7 +12,7 @@
 # }
 
 # resource "aws_instance" "test_backend" {
-#   ami           = data.aws_ami.linux.id
+#   ami           = data.aws_ami.amazon_linux_2023.id
 #   instance_type = var.ami_type
 
 #   vpc_security_group_ids = [aws_security_group.backend.id]

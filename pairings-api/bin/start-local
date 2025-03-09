@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Colours
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Error handling
+handle_error() {
+  echo -e "${RED}❌ Error: $1${NC}"
+  exit 1
+}
+
+# Check for AWS Account ID
+if [ -z "$AWS_ACCOUNT_ID" ]; then
+  echo -e "${YELLOW}AWS_ACCOUNT_ID not found in environment.${NC}"
+  echo -e "${BLUE}Please enter your AWS Account ID:${NC}"
+  read -r input_account_id
+  
+  if [ -z "$input_account_id" ]; then
+    handle_error "No AWS Account ID provided. Please set AWS_ACCOUNT_ID environment variable or enter it when prompted."
+  fi
+  
+  # Validate AWS Account ID format (12 digits)
+  if ! [[ $input_account_id =~ ^[0-9]{12}$ ]]; then
+    handle_error "Invalid AWS Account ID format. Must be 12 digits."
+  fi
+  
+  export AWS_ACCOUNT_ID=$input_account_id
+fi
+
+echo -e "${BLUE}Using AWS Account ID: $AWS_ACCOUNT_ID${NC}"
+
+# Detect architecture
+ARCH=$(uname -m)
+case $ARCH in
+  "x86_64")
+    ARCH="amd64"
+    ;;
+  "arm64"|"aarch64")
+    ARCH="arm64"
+    ;;
+  *)
+    handle_error "Unknown architecture: $ARCH"
+    ;;
+esac
+
+# Export variables
+export ARCH
+export RAILS_MASTER_KEY=$(cat config/master.key)
+
+echo -e "${BLUE}Starting containers for $ARCH architecture...${NC}"
+docker compose up -d || handle_error "Failed to start containers"
+
+echo -e "${GREEN}✅ Containers started successfully!${NC}"

@@ -6,7 +6,7 @@ View the interactive API documentation:
 
 [![API Documentation](https://img.shields.io/badge/API-Documentation-blue)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/marcusal/pairings-app/main/pairings-api/swagger/v1/swagger.yaml)
 
-Before running the application locally:
+## Before running the application locally:
 
 1. Copy the example prompts file:
 
@@ -16,62 +16,39 @@ cp config/prompts.example.yml config/prompts.yml
 
 2. Update `config/prompts.yml` with your actual prompts and configuration
 
-## System dependencies
+## Rails Local Development
 
-Install ruby 3.4.1 with your package manager (mise is recommended)
+Cd into the Rails project and run the usual commands:
 
-```
-brew install postgresql@14
-brew services start postgresql@14
-brew install redis
-brew services start redis
-brew services list
-```
-
-## Create a postgres user with password
-
-```
-createuser -U postgres -d -R -S -P {{username}}
+```bash
+bin/rails db:prepare
+bin/rails db:seed
+bin/rails s
+bin/sidekiq
 ```
 
-OR
+## Docker test production app locally
+
+Cd into Rails project and run one of the following commands:
+
+# Option 1: Use environment variable
 
 ```
-sudo -u postgres psql
-
-CREATE USER admin WITH PASSWORD 'your_password' CREATEDB;
-\q
+export AWS_ACCOUNT_ID={YOUR_AWS_ACCOUNT_ID}
+./bin/start-local
 ```
 
-## Gems setup
+# Option 2: Let the script prompt you
 
 ```
-gem install rails
-gem install bundler
-bundle install
+./bin/start-local
+# It will ask for your AWS Account ID
 ```
 
-## Env setup
-
-Update .env.development with your own values
+# Option 3: Start with temporary environment variable
 
 ```
-cp .env.example .env.development
-```
-
-## Create db
-
-```
-rails db:create
-rails db:migrate
-rails db:seed
-```
-
-## Start server and sidekiq
-
-```
-rails s
-bundle exec sidekiq
+AWS_ACCOUNT_ID={YOUR_AWS_ACCOUNT_ID} ./bin/start-local
 ```
 
 ## Terraform Development Workflow
@@ -126,15 +103,30 @@ When ready to deploy to real AWS infrastructure:
    terraform state rm $(terraform state list)
    ```
 
+   Change backend security group to allow SSH access from your IP
+
 3. Initialize and apply with regular Terraform commands:
 
    ```bash
+   cd terraform-setup
    terraform init
-   terraform plan
+   terraform plan \
+   -var="db_username=someusername" \
+   -var="db_password=somepassword" \
+   -var="rails_master_key=$(cat ../pairings-api/config/master.key)" \
+   -var="ecr_image_url=${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/{YOUR_IMAGE_NAME}" \
+   -var="ssh_public_key=$(cat ~/.ssh/aws-deployer.pub)" \
+   -var="environment=pairings-api-production" \
+   -var="aws_account_id=$AWS_ACCOUNT_ID"
 
-   (confirm changes)
-
-   terraform apply
+   terraform apply \
+   -var="db_username=someusername" \
+   -var="db_password=somepassword" \
+   -var="rails_master_key=$(cat ../pairings-api/config/master.key)" \
+   -var="ecr_image_url=${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/{YOUR_IMAGE_NAME}" \
+   -var="ssh_public_key=$(cat ~/.ssh/aws-deployer.pub)" \
+   -var="environment=pairings-api-production" \
+   -var="aws_account_id=$AWS_ACCOUNT_ID"
    ```
 
 4. After deployment, revert any changes to continue local development:
@@ -144,15 +136,22 @@ When ready to deploy to real AWS infrastructure:
 
 ### File Structure
 
-- `main.tf` - Main Terraform configuration (local development version)
+- `main.tf` - Main Terraform configuration
+- `outputs.tf` - Outputs for the Terraform configuration
+- `variables.tf` - Variables for the Terraform configuration
+- `terraform-setup` - Terraform configuration for the project
+- `pairings-api` - Rails project
 
 - `.gitignore` - Excludes local Terraform files and state
 
 ### Important Notes
 
-- Join workspace and login to Terraform Cloud before deploying
 - Never commit AWS credentials to the repository
 - Use `terraform workspace show` to verify your current workspace
+
+### TBA
+
+- Seperate config for staging and production
 
 ## License
 
