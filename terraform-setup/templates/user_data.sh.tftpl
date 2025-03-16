@@ -60,7 +60,7 @@ sudo docker run -d \
   -e REDIS_URL="redis://$REDIS_ENDPOINT:6379/1" \
   -e SIDEKIQ_ENABLED=true \
   ${ecr_image_url} \
-  bin/rails server -p 3000 -b 0.0.0.0
+  bin/rails server -d -p 3000 -b 0.0.0.0
 
 echo "Running Sidekiq container..."
 sudo docker run -d \
