@@ -34,3 +34,6 @@
 /config/credentials.yml.enc
 /config/prompts.yml
 /config/auth0.yml
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

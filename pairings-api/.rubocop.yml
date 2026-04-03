@@ -4,3 +4,16 @@ inherit_from:
 inherit_gem:
   rubocop-pave:
     - default.yml
+
+RSpecRails/InferredSpecType:
+  Enabled: false
+
+Rails/ApplicationController:
+  Exclude:
+    - app/controllers/auth0_controller.rb
+    - app/controllers/web/base_controller.rb
+
+Naming/VariableNumber:
+  AllowedIdentifiers:
+    - item1
+    - item2
