@@ -71,4 +71,5 @@ jobs:
         working-directory: ./pairings-api
         run: |
           bundle exec rails db:test:prepare
+          bundle exec rails tailwindcss:build
           bundle exec rspec
