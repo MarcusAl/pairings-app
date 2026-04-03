@@ -46,12 +46,13 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :redis_cache_store, {
+  redis_cache_options = {
     url: ENV["REDIS_URL"] || "redis://redis:6379/1",
-    ssl_params: {verify_mode: OpenSSL::SSL::VERIFY_NONE},
     pool_size: ENV["RAILS_MAX_THREADS"] || 5,
     pool_timeout: 5
   }
+  redis_cache_options[:ssl_params] = {verify_mode: OpenSSL::SSL::VERIFY_PEER} if ENV["REDIS_URL"]&.start_with?("rediss://")
+  config.cache_store = :redis_cache_store, redis_cache_options
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :sidekiq
