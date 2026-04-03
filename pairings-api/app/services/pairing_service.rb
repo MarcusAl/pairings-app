@@ -9,7 +9,7 @@ class PairingService
   class ParseError < PairingServiceError; end
   class NoPairingFoundError < PairingServiceError; end
 
-  require 'base64'
+  require "base64"
 
   def self.call(blob_image_id:)
     new(blob_image_id).call
@@ -32,23 +32,19 @@ class PairingService
   attr_reader :blob_image_id
 
   def get_pairing
-    begin
-      response = client.messages(
-        parameters: {
-          model: ANTHROPIC_MODEL,
-          system: prompt['system'],
-          messages: prompt['messages'],
-          max_tokens: 1000
-        }
-      )
-    rescue Faraday::ClientError => e
-      handle_error(e)
-    end
-  
-    text_response = response.dig('content', 0, 'text')
+    response = client.messages.create(
+      model: ANTHROPIC_MODEL,
+      system: prompt['system'],
+      messages: prompt['messages'],
+      max_tokens: 1000
+    )
+
+    text_response = response.content&.first&.text
     return if text_response.blank?
 
     parse_pairing_response(text_response)
+  rescue Anthropic::Errors::APIError => e
+    handle_error(e)
   end
 
   def blob_image
@@ -56,7 +52,10 @@ class PairingService
   end
 
   def client
-    @client ||= Anthropic::Client.new
+    @client ||= Anthropic::Client.new(
+      api_key: ENV["ANTHROPIC_API_KEY"] || Rails.application.credentials.anthropic_api_key,
+      timeout: 240
+    )
   end
 
   def image_base64
@@ -97,19 +96,18 @@ class PairingService
     raise ParseError, "Failed to parse response: #{e.message}"
   end
 
-  def handle_error(e)
-    message = e.response[:body].dig('error', 'message')
-    case e.response[:status]
-    when 400
-      raise InvalidInputError, message
-    when 404
-      raise NotFoundError, message
-    when 429
-      raise TooManyRequestsError, message
-    when 529
-      raise AnthropicOverloadedError, message
+  def handle_error(error)
+    case error
+    when Anthropic::Errors::BadRequestError
+      raise InvalidInputError, error.message
+    when Anthropic::Errors::NotFoundError
+      raise NotFoundError, error.message
+    when Anthropic::Errors::RateLimitError
+      raise TooManyRequestsError, error.message
+    when Anthropic::Errors::InternalServerError
+      raise AnthropicOverloadedError, error.message
     else
-      raise PairingServiceError, "Request failed: #{message}"
+      raise PairingServiceError, "Request failed: #{error.message}"
     end
   end
 end

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <title>Pairings</title>
+</head>
+<body class="h-full bg-gray-50 text-gray-900 pb-16 sm:pb-0">
+  <%= render "web/shared/navbar" %>
+
+  <main class="mx-auto max-w-lg px-4 py-6 sm:max-w-2xl lg:max-w-4xl">
+    <%= render "web/shared/flash" %>
+    <%= yield %>
+  </main>
+</body>
+</html>

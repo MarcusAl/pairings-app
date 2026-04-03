@@ -45,24 +45,27 @@ RSpec.describe PairingService do
     end
     
     context 'with error responses' do
-      it 'handles rate limiting errors' do
-        VCR.use_cassette('pairing_service/rate_limit_error') do
-          allow_any_instance_of(Anthropic::Client).to receive(:messages)
-            .and_raise(Faraday::ClientError.new(nil, { status: 429, body: { error: { message: 'Too many requests' } } }))
-            
-          expect { described_class.call(blob_image_id: blob.id) }
-            .to raise_error(PairingService::TooManyRequestsError)
-        end
+      let(:messages_resource) { instance_double(Anthropic::Resources::Messages) }
+
+      before do
+        allow_any_instance_of(Anthropic::Client).to receive(:messages).and_return(messages_resource)
       end
-      
+
+      it 'handles rate limiting errors' do
+        allow(messages_resource).to receive(:create)
+          .and_raise(Anthropic::Errors::RateLimitError.new(url: URI("https://api.anthropic.com"), status: 429, body: nil, request: nil, response: nil))
+
+        expect { described_class.call(blob_image_id: blob.id) }
+          .to raise_error(PairingService::TooManyRequestsError)
+      end
+
       it 'handles invalid responses' do
-        VCR.use_cassette('pairing_service/invalid_response') do
-          allow_any_instance_of(Anthropic::Client).to receive(:messages)
-            .and_return({ 'content' => [{ 'text' => 'Invalid|Response' }] })
-            
-          expect { described_class.call(blob_image_id: blob.id) }
-            .to raise_error(PairingService::ParseError)
-        end
+        text_block = instance_double(Anthropic::Models::TextBlock, text: 'Invalid|Response')
+        response = instance_double(Anthropic::Models::Message, content: [text_block])
+        allow(messages_resource).to receive(:create).and_return(response)
+
+        expect { described_class.call(blob_image_id: blob.id) }
+          .to raise_error(PairingService::ParseError)
       end
     end
   end

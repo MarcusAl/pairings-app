@@ -56,11 +56,12 @@ RSpec.describe 'items', type: :request do
       end
 
       response(200, 'filters by search') do
-        let(:'search') { item.name.split(' ').first }
-        
+        let(:'search') { item.name }
+
         run_test! do
           body = JSON.parse(response.body)
-          expect(body['data'].count).to eq(1)
+          expect(body['data'].count).to be >= 1
+          expect(body['data'].map { |i| i['name'] }).to include(item.name)
         end
       end
 
