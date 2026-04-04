@@ -1,13 +1,13 @@
 <div class="flex min-h-[80vh] items-center justify-center">
   <div class="w-full max-w-sm space-y-6">
     <div class="text-center">
-      <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
-      <p class="mt-1 text-sm text-gray-500"><%= t(".subtitle") %></p>
+      <h1 class="heading-auth"><%= t(".title") %></h1>
+      <p class="mt-1 text-body"><%= t(".subtitle") %></p>
     </div>
 
     <%= form_with model: @user, url: web_signup_path, class: "space-y-4" do |f| %>
       <% if @user.errors.any? %>
-        <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div class="form-error">
           <ul class="list-disc pl-4 space-y-1">
             <% @user.errors.full_messages.each do |message| %>
               <li><%= message %></li>
@@ -17,36 +17,33 @@
       <% end %>
 
       <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email",
-            class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        <%= f.label :email, class: "form-label" %>
+        <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "form-input" %>
       </div>
 
       <div>
-        <%= f.label :password, t(".password_label"), class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password, required: true, autocomplete: "new-password", minlength: 12,
-            class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        <%= f.label :password, t(".password_label"), class: "form-label" %>
+        <%= f.password_field :password, required: true, autocomplete: "new-password", minlength: 12, class: "form-input" %>
       </div>
 
       <div>
-        <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", minlength: 12,
-            class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        <%= f.label :password_confirmation, class: "form-label" %>
+        <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", minlength: 12, class: "form-input" %>
       </div>
 
-      <%= f.submit t(".create_account"), class: "w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 cursor-pointer" %>
+      <%= f.submit t(".create_account"), class: "btn btn--primary btn--full" %>
     <% end %>
 
     <div class="relative">
-      <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-      <div class="relative flex justify-center text-sm"><span class="bg-gray-50 px-2 text-gray-500"><%= t(".or") %></span></div>
+      <div class="absolute inset-0 flex items-center"><div class="w-full border-t divider"></div></div>
+      <div class="relative flex justify-center text-sm"><span class="divider-text px-2"><%= t(".or") %></span></div>
     </div>
 
     <%= button_to t(".continue_with_auth0"), "/auth/auth0", method: :post, data: { turbo: false },
-        class: "w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer" %>
+        class: "btn btn--secondary btn--full" %>
 
-    <p class="text-center text-sm text-gray-500">
-      <%= t(".have_account_html", link: link_to(t(".sign_in"), web_login_path, class: "font-medium text-indigo-600 hover:text-indigo-500")) %>
+    <p class="text-center text-body">
+      <%= t(".have_account_html", link: link_to(t(".sign_in"), web_login_path, class: "text-link")) %>
     </p>
   </div>
 </div>

@@ -1,14 +1,14 @@
 <%# Desktop top nav %>
-<nav class="hidden sm:block bg-white border-b border-gray-200">
+<nav class="navbar hidden sm:block border-b border-white/10">
   <div class="mx-auto max-w-4xl px-4 flex items-center justify-between h-14">
-    <%= link_to t("web.shared.navbar.brand"), web_root_path, class: "text-lg font-semibold text-gray-900" %>
+    <%= link_to t("web.shared.navbar.brand"), web_root_path, class: "navbar__brand" %>
     <% if current_user %>
       <div class="flex items-center gap-6">
-        <%= link_to t("web.shared.navbar.dashboard"), web_root_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
-        <%= link_to t("web.shared.navbar.items"), web_items_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
-        <%= link_to t("web.shared.navbar.pairings"), web_pairings_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
-        <%= link_to t("web.shared.navbar.explore"), web_explore_items_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
-        <%= button_to t("web.shared.navbar.sign_out"), web_logout_path, method: :delete, class: "text-sm text-gray-500 hover:text-gray-700" %>
+        <%= link_to t("web.shared.navbar.dashboard"), web_root_path, class: "navbar__link" %>
+        <%= link_to t("web.shared.navbar.items"), web_items_path, class: "navbar__link" %>
+        <%= link_to t("web.shared.navbar.pairings"), web_pairings_path, class: "navbar__link" %>
+        <%= link_to t("web.shared.navbar.explore"), web_explore_items_path, class: "navbar__link" %>
+        <%= button_to t("web.shared.navbar.sign_out"), web_logout_path, method: :delete, class: "navbar__sign-out" %>
         <%= render "web/shared/locale_switcher" %>
       </div>
     <% else %>
@@ -21,21 +21,21 @@
 
 <%# Mobile bottom tab bar %>
 <% if current_user %>
-  <nav class="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 z-50">
+  <nav class="tab-bar sm:hidden fixed bottom-0 inset-x-0 border-t border-white/10 z-50">
     <div class="flex justify-around items-center h-14">
-      <%= link_to web_root_path, class: "flex flex-col items-center gap-0.5 text-gray-500 hover:text-gray-900" do %>
+      <%= link_to web_root_path, class: "tab-bar__item" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
         <span class="text-xs"><%= t("web.shared.navbar.home") %></span>
       <% end %>
-      <%= link_to web_items_path, class: "flex flex-col items-center gap-0.5 text-gray-500 hover:text-gray-900" do %>
+      <%= link_to web_items_path, class: "tab-bar__item" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
         <span class="text-xs"><%= t("web.shared.navbar.items") %></span>
       <% end %>
-      <%= link_to web_pairings_path, class: "flex flex-col items-center gap-0.5 text-gray-500 hover:text-gray-900" do %>
+      <%= link_to web_pairings_path, class: "tab-bar__item" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
         <span class="text-xs"><%= t("web.shared.navbar.pairings") %></span>
       <% end %>
-      <%= link_to web_explore_items_path, class: "flex flex-col items-center gap-0.5 text-gray-500 hover:text-gray-900" do %>
+      <%= link_to web_explore_items_path, class: "tab-bar__item" do %>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <span class="text-xs"><%= t("web.shared.navbar.explore") %></span>
       <% end %>
