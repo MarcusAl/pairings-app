@@ -299,12 +299,13 @@
 }
 
 .navbar__sign-out {
-  @apply text-sm;
+  @apply text-sm cursor-pointer transition-colors;
   color: color-mix(in srgb, var(--color-starlight) 50%, transparent);
 }
 
 .navbar__sign-out:hover {
   color: var(--color-starlight);
+  text-decoration: underline;
 }
 
 .tab-bar {
@@ -427,11 +428,11 @@
 }
 
 .carousel__image {
-  @apply w-full aspect-[16/9] sm:aspect-[21/9] object-cover;
+  @apply w-full aspect-[4/3] object-cover;
 }
 
 .carousel__credit {
-  @apply absolute bottom-0 right-0 px-3 py-1.5 text-xs;
+  @apply absolute bottom-0 right-0 px-2 py-1 text-xs opacity-0 transition-opacity;
   background: color-mix(in srgb, var(--color-charleston) 70%, transparent);
   color: color-mix(in srgb, var(--color-starlight) 80%, transparent);
 }
@@ -440,14 +441,18 @@
   text-decoration: underline;
 }
 
+.carousel__slide-item:hover .carousel__credit {
+  opacity: 1;
+}
+
 .carousel__btn {
-  @apply absolute top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition-opacity opacity-0;
+  @apply absolute top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition-all cursor-pointer;
   background: color-mix(in srgb, var(--color-charleston) 60%, transparent);
   color: var(--color-starlight);
 }
 
-.carousel:hover .carousel__btn {
-  opacity: 1;
+.carousel__btn:hover {
+  background: color-mix(in srgb, var(--color-charleston) 85%, transparent);
 }
 
 .carousel__btn--prev {

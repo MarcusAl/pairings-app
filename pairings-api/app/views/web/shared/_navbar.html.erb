@@ -8,7 +8,7 @@
         <%= link_to t("web.shared.navbar.items"), web_items_path, class: "navbar__link" %>
         <%= link_to t("web.shared.navbar.pairings"), web_pairings_path, class: "navbar__link" %>
         <%= link_to t("web.shared.navbar.explore"), web_explore_items_path, class: "navbar__link" %>
-        <%= button_to t("web.shared.navbar.sign_out"), web_logout_path, method: :delete, class: "navbar__sign-out" %>
+        <%= button_to t("web.shared.navbar.sign_out"), web_logout_path, method: :delete, form_class: "flex items-center", class: "navbar__sign-out" %>
         <%= render "web/shared/locale_switcher" %>
       </div>
     <% else %>

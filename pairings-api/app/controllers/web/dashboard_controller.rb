@@ -6,7 +6,7 @@ module Web
                                      .includes(:item1, :item2)
                                      .order(created_at: :desc)
                                      .limit(5)
-      @carousel_images = UnsplashClient.food_images
+      @carousel_images = UnsplashClient.food_images(count: 9)
     end
   end
 end

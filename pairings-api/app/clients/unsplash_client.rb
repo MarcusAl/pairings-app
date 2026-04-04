@@ -1,10 +1,10 @@
 class UnsplashClient
-  CACHE_KEY = 'unsplash_food_images'.freeze
+  CACHE_KEY_PREFIX = 'unsplash_food_images'.freeze
   CACHE_DURATION = 1.hour
   API_URL = 'https://api.unsplash.com/photos/random'.freeze
 
-  def self.food_images(count: 6)
-    Rails.cache.fetch(CACHE_KEY, expires_in: CACHE_DURATION) do
+  def self.food_images(count: 9)
+    Rails.cache.fetch("#{CACHE_KEY_PREFIX}/#{count}", expires_in: CACHE_DURATION) do
       fetch_images(count)
     end
   end
