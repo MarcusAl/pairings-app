@@ -1,0 +1,21 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-xl font-bold text-gray-900"><%= t(".title") %></h1>
+    <%= link_to t(".new_pairing"), new_web_pairing_path, class: "rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700" %>
+  </div>
+
+  <% if @pairings.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <% @pairings.each do |pairing| %>
+        <%= render "web/shared/pairing_card", pairing: pairing %>
+      <% end %>
+    </div>
+
+    <%= render "web/shared/pagination" %>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-sm"><%= t(".no_pairings") %></p>
+      <%= link_to t(".create_first"), new_web_pairing_path, class: "mt-2 inline-block text-sm font-medium text-amber-600 hover:text-amber-700" %>
+    </div>
+  <% end %>
+</div>

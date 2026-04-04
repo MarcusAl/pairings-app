@@ -1,0 +1,81 @@
+<%= form_with model: item, url: url, class: "space-y-4" do |f| %>
+  <% if item.errors.any? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+      <ul class="list-disc pl-4 space-y-1">
+        <% item.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :image, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.file_field :image, accept: "image/png,image/jpeg",
+        class: "mt-1 block w-full text-sm text-gray-500 file:mr-4 file:rounded-lg file:border-0 file:bg-amber-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-amber-700 hover:file:bg-amber-100" %>
+    <% if item.image.attached? %>
+      <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
+        <%= image_tag item.image, class: "w-full h-full object-cover", alt: t("web.items.form.current_image") %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name, required: true,
+        class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500" %>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :description, rows: 3,
+        class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500" %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :category, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :category, options_for_select(Item::CATEGORIES.map { |k, v| [v, k] }, item.category),
+          { prompt: t("web.items.form.select_category") },
+          { required: true, class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500" } %>
+    </div>
+
+    <div>
+      <%= f.label :price_range, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :price_range, options_for_select(Item::PRICE_RANGES.map { |k, v| ["#{k} — #{v}", k] }, item.price_range),
+          { prompt: t("web.items.form.select_range") },
+          { required: true, class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500" } %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :subcategory, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :subcategory, placeholder: t("web.items.form.subcategory_placeholder"),
+        class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500" %>
+  </div>
+
+  <fieldset>
+    <legend class="block text-sm font-medium text-gray-700 mb-2"><%= t("web.items.form.flavor_profiles") %></legend>
+    <div class="flex flex-wrap gap-2">
+      <% %w[sweet salty sour bitter umami spicy smoky herbal floral fruity nutty earthy rich tangy].each do |flavor| %>
+        <label class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1 text-sm cursor-pointer has-[:checked]:bg-amber-50 has-[:checked]:border-amber-300 has-[:checked]:text-amber-800">
+          <%= check_box_tag "item[flavor_profiles][]", flavor, item.flavor_profiles.include?(flavor), class: "sr-only" %>
+          <%= flavor %>
+        </label>
+      <% end %>
+    </div>
+  </fieldset>
+
+  <div>
+    <%= f.label :primary_flavor_profile, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :primary_flavor_profile, required: true, placeholder: t("web.items.form.primary_flavor_placeholder"),
+        class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500" %>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <%= f.check_box :public, class: "rounded border-gray-300 text-amber-600 focus:ring-amber-500" %>
+    <%= f.label :public, t("web.items.form.make_public"), class: "text-sm text-gray-700" %>
+  </div>
+
+  <%= f.submit class: "w-full rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 cursor-pointer" %>
+<% end %>

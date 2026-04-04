@@ -1,0 +1,15 @@
+<div class="space-y-6">
+  <h1 class="text-xl font-bold text-gray-900"><%= t(".title") %></h1>
+
+  <% if @items.any? %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <% @items.each do |item| %>
+        <%= render "web/shared/item_card", item: item, path: web_explore_items_path %>
+      <% end %>
+    </div>
+
+    <%= render "web/shared/pagination" %>
+  <% else %>
+    <p class="text-center py-12 text-sm text-gray-500"><%= t(".no_items") %></p>
+  <% end %>
+</div>

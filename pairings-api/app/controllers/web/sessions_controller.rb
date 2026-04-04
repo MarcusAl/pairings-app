@@ -11,16 +11,16 @@ module Web
 
       if user
         log_in(user)
-        redirect_to web_root_path, notice: 'Signed in.'
+        redirect_to web_root_path, notice: t('.notice')
       else
-        flash.now[:alert] = 'Invalid email or password.'
+        flash.now[:alert] = t('.alert')
         render :new, status: :unprocessable_entity
       end
     end
 
     def destroy
       log_out
-      redirect_to web_login_path, notice: 'Signed out.'
+      redirect_to web_login_path, notice: t('.notice')
     end
 
     private

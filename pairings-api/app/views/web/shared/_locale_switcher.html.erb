@@ -1,0 +1,9 @@
+<% if available_locales.size > 1 %>
+  <%= form_with url: request.path, method: :get, class: "inline-flex", data: { turbo: false } do |f| %>
+    <%= f.select :locale,
+        available_locales.map { |loc| [t("language_name", locale: loc), loc] },
+        { selected: I18n.locale },
+        { class: "rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs text-gray-600 focus:border-amber-500 focus:ring-amber-500 cursor-pointer",
+          onchange: "this.form.requestSubmit()" } %>
+  <% end %>
+<% end %>

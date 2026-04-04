@@ -1,0 +1,61 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <%= link_to web_items_path, class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700" do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <%= t(".back") %>
+    <% end %>
+    <div class="flex gap-2">
+      <%= link_to t(".edit"), edit_web_item_path(@item), class: "rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50" %>
+      <%= button_to t(".delete"), web_item_path(@item), method: :delete,
+          data: { turbo_confirm: t(".delete_confirm") },
+          class: "rounded-lg border border-red-200 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50" %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+    <% if @item.image.attached? %>
+      <div class="aspect-[16/9] sm:aspect-[2/1] bg-gray-100 overflow-hidden">
+        <%= image_tag @item.image, class: "w-full h-full object-cover", alt: @item.name %>
+      </div>
+    <% end %>
+
+    <div class="p-4 sm:p-6 space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <h1 class="text-xl font-bold text-gray-900"><%= @item.name %></h1>
+        <span class="shrink-0 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700"><%= Item::CATEGORIES[@item.category] %></span>
+      </div>
+
+      <% if @item.description.present? %>
+        <p class="text-sm text-gray-600 leading-relaxed"><%= @item.description %></p>
+      <% end %>
+
+      <div class="flex flex-wrap gap-1.5">
+        <% @item.flavor_profiles.each do |flavor| %>
+          <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium <%= flavor == @item.primary_flavor_profile ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-600' %>">
+            <%= flavor %>
+          </span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-4 text-sm text-gray-500 border-t border-gray-100 pt-4">
+        <span><%= Item::PRICE_RANGES[@item.price_range] %></span>
+        <% if @item.subcategory.present? %>
+          <span>&middot; <%= @item.subcategory %></span>
+        <% end %>
+        <span>&middot; <%= @item.public? ? t(".public") : t(".private") %></span>
+      </div>
+    </div>
+  </div>
+
+  <% pairings = @item.pairings_as_item1.or(@item.pairings_as_item2).includes(:item1, :item2).limit(6) %>
+  <% if pairings.any? %>
+    <div class="space-y-3">
+      <h2 class="text-lg font-semibold text-gray-900"><%= t(".pairings") %></h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <% pairings.each do |pairing| %>
+          <%= render "web/shared/pairing_card", pairing: pairing %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

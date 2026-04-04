@@ -6,6 +6,24 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+          working-directory: ./pairings-api
+
+      - name: Lint with RuboCop
+        working-directory: ./pairings-api
+        run: bundle exec rubocop
+
   scan_ruby:
     runs-on: ubuntu-latest
 
