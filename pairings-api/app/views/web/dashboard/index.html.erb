@@ -21,7 +21,9 @@
   <section class="space-y-3">
     <div class="flex items-center justify-between">
       <h2 class="heading-section"><%= t(".recent_items") %></h2>
-      <%= link_to t(".view_all"), web_items_path, class: "text-link" %>
+      <% if @recent_items.any? %>
+        <%= link_to t(".view_all"), web_items_path, class: "text-link" %>
+      <% end %>
     </div>
     <% if @recent_items.any? %>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -37,7 +39,9 @@
   <section class="space-y-3">
     <div class="flex items-center justify-between">
       <h2 class="heading-section"><%= t(".recent_pairings") %></h2>
-      <%= link_to t(".view_all"), web_pairings_path, class: "text-link" %>
+      <% if @recent_pairings.any? %>
+        <%= link_to t(".view_all"), web_pairings_path, class: "text-link" %>
+      <% end %>
     </div>
     <% if @recent_pairings.any? %>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -48,5 +52,10 @@
     <% else %>
       <p class="text-body"><%= t(".no_pairings") %></p>
     <% end %>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="heading-section"><%= t(".inspiration") %></h2>
+    <%= render "web/shared/carousel", images: @carousel_images %>
   </section>
 </div>

@@ -5,7 +5,8 @@
       <p class="mt-1 text-body"><%= t(".subtitle") %></p>
     </div>
 
-    <%= form_with model: @user, url: web_signup_path, class: "space-y-4" do |f| %>
+    <%= form_with model: @user, url: web_signup_path, class: "space-y-4",
+        data: { controller: "form-validation", action: "input->form-validation#validate change->form-validation#validate" } do |f| %>
       <% if @user.errors.any? %>
         <div class="form-error">
           <ul class="list-disc pl-4 space-y-1">
@@ -31,7 +32,7 @@
         <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", minlength: 12, class: "form-input" %>
       </div>
 
-      <%= f.submit t(".create_account"), class: "btn btn--primary btn--full" %>
+      <%= f.submit t(".create_account"), class: "btn btn--primary btn--full transition-opacity", data: { form_validation_target: "submit" } %>
     <% end %>
 
     <div class="relative">

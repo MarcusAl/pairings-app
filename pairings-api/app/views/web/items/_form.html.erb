@@ -1,4 +1,5 @@
-<%= form_with model: item, url: url, class: "space-y-4" do |f| %>
+<%= form_with model: item, url: url, class: "space-y-4",
+    data: { controller: "form-validation", action: "input->form-validation#validate change->form-validation#validate" } do |f| %>
   <% if item.errors.any? %>
     <div class="form-error">
       <ul class="list-disc pl-4 space-y-1">
@@ -9,14 +10,21 @@
     </div>
   <% end %>
 
-  <div>
+  <div data-controller="image-preview">
     <%= f.label :image, class: "form-label" %>
-    <%= f.file_field :image, accept: "image/png,image/jpeg", class: "form-file" %>
-    <% if item.image.attached? %>
-      <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden" style="background: var(--border-card);">
-        <%= image_tag item.image, class: "w-full h-full object-cover", alt: t("web.items.form.current_image") %>
-      </div>
-    <% end %>
+    <%= f.file_field :image, accept: "image/png,image/jpeg", class: "form-file",
+        data: { image_preview_target: "input", action: "change->image-preview#preview" } %>
+    <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden" style="background: var(--border-card);">
+      <% if item.image.attached? %>
+        <%= image_tag item.image, class: "w-full h-full object-cover", alt: t("web.items.form.current_image"),
+            data: { image_preview_target: "preview" } %>
+      <% else %>
+        <img class="w-full h-full object-cover hidden" data-image-preview-target="preview" alt="">
+        <div class="w-full h-full flex items-center justify-center" data-image-preview-target="placeholder">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" style="color: var(--border-subtle);" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/></svg>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div>
@@ -72,5 +80,5 @@
     <%= f.label :public, t("web.items.form.make_public"), class: "text-sm", style: "color: var(--text-secondary);" %>
   </div>
 
-  <%= f.submit class: "btn btn--primary btn--full" %>
+  <%= f.submit class: "btn btn--primary btn--full transition-opacity", data: { form_validation_target: "submit" } %>
 <% end %>

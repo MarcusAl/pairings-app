@@ -189,14 +189,19 @@
 
 /* Flavor profile chip (unchecked) */
 .flavor-chip {
-  @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm cursor-pointer;
+  @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm cursor-pointer transition-colors;
   border-color: var(--border-subtle);
   color: var(--text-primary);
 }
 
+.flavor-chip:hover {
+  background: color-mix(in srgb, var(--color-olive) 8%, transparent);
+  border-color: var(--color-olive);
+}
+
 /* Flavor profile chip (checked) */
 .flavor-chip:has(:checked) {
-  background: color-mix(in srgb, var(--color-olive) 12%, transparent);
+  background: color-mix(in srgb, var(--color-olive) 15%, transparent);
   border-color: var(--color-olive);
   color: var(--color-charleston);
 }
@@ -388,13 +393,67 @@
 }
 
 .locale-select {
-  @apply rounded-lg border px-2 py-1 text-xs cursor-pointer;
-  border-color: var(--border-subtle);
-  background: color-mix(in srgb, var(--color-starlight) 50%, transparent);
-  color: var(--text-secondary);
+  @apply rounded-lg border px-2 py-1 text-xs font-medium cursor-pointer;
+  border-color: color-mix(in srgb, var(--color-starlight) 30%, transparent);
+  background: color-mix(in srgb, var(--color-starlight) 15%, transparent);
+  color: var(--color-starlight);
 }
 
 .locale-select:focus {
   border-color: var(--border-focus);
   outline: none;
+}
+
+/* ==========================================================================
+   Carousel
+   ========================================================================== */
+
+.carousel {
+  @apply relative rounded-xl overflow-hidden;
+}
+
+.carousel__track {
+  @apply flex overflow-x-auto snap-x snap-mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__slide {
+  @apply flex-none w-full snap-center;
+}
+
+.carousel__image {
+  @apply w-full aspect-[16/9] sm:aspect-[21/9] object-cover;
+}
+
+.carousel__credit {
+  @apply absolute bottom-0 right-0 px-3 py-1.5 text-xs;
+  background: color-mix(in srgb, var(--color-charleston) 70%, transparent);
+  color: color-mix(in srgb, var(--color-starlight) 80%, transparent);
+}
+
+.carousel__credit a {
+  text-decoration: underline;
+}
+
+.carousel__btn {
+  @apply absolute top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition-opacity opacity-0;
+  background: color-mix(in srgb, var(--color-charleston) 60%, transparent);
+  color: var(--color-starlight);
+}
+
+.carousel:hover .carousel__btn {
+  opacity: 1;
+}
+
+.carousel__btn--prev {
+  @apply left-2;
+}
+
+.carousel__btn--next {
+  @apply right-2;
 }

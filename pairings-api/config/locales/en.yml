@@ -85,6 +85,7 @@ en:
         view_all: "View all"
         no_items: "No items yet. Add your first item to get started."
         no_pairings: "No pairings yet. Start pairing your items with AI."
+        inspiration: "Culinary Inspiration"
     items:
       index:
         title: "My Items"

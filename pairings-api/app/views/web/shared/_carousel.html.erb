@@ -1,0 +1,26 @@
+<% if images.any? && images.first[:url].present? %>
+  <div class="carousel" data-controller="carousel" data-carousel-interval-value="5000"
+       data-action="mouseenter->carousel#pause mouseleave->carousel#resume touchstart->carousel#pause touchend->carousel#resume">
+    <div class="carousel__track" data-carousel-target="track">
+      <% images.each do |image| %>
+        <div class="carousel__slide" data-carousel-target="slide">
+          <%= image_tag image[:url], alt: image[:alt], class: "carousel__image", loading: "lazy" %>
+          <% if image[:credit].present? %>
+            <div class="carousel__credit">
+              Photo by <%= link_to image[:credit], "#{image[:credit_url]}?utm_source=pairings_app&utm_medium=referral", target: "_blank", rel: "noopener noreferrer" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if images.size > 1 %>
+      <button class="carousel__btn carousel__btn--prev" data-action="carousel#previous" aria-label="Previous">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="carousel__btn carousel__btn--next" data-action="carousel#next" aria-label="Next">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    <% end %>
+  </div>
+<% end %>

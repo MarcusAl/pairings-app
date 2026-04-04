@@ -5,7 +5,8 @@
       <p class="mt-1 text-body"><%= t(".subtitle") %></p>
     </div>
 
-    <%= form_with url: web_login_path, class: "space-y-4" do |f| %>
+    <%= form_with url: web_login_path, class: "space-y-4",
+        data: { controller: "form-validation", action: "input->form-validation#validate change->form-validation#validate" } do |f| %>
       <div>
         <%= f.label :email, class: "form-label" %>
         <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "form-input" %>
@@ -16,7 +17,7 @@
         <%= f.password_field :password, required: true, autocomplete: "current-password", class: "form-input" %>
       </div>
 
-      <%= f.submit t(".sign_in"), class: "btn btn--primary btn--full" %>
+      <%= f.submit t(".sign_in"), class: "btn btn--primary btn--full transition-opacity", data: { form_validation_target: "submit" } %>
     <% end %>
 
     <div class="relative">
