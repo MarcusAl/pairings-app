@@ -17,3 +17,7 @@ Naming/VariableNumber:
   AllowedIdentifiers:
     - item1
     - item2
+
+Metrics/MethodLength:
+  CountAsOne:
+    - array

@@ -1,0 +1,31 @@
+<div class="space-y-6">
+  <h1 class="text-xl font-bold text-gray-900"><%= t(".title") %></h1>
+  <p class="text-sm text-gray-500"><%= t(".subtitle") %></p>
+
+  <% if @items.any? %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <% @items.each do |item| %>
+        <div class="relative">
+          <%= button_to web_pairings_path, params: { item1_id: item.id }, class: "w-full text-left group" do %>
+            <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md hover:border-amber-300 transition-all cursor-pointer">
+              <div class="aspect-[4/3] bg-gray-100 overflow-hidden">
+                <% if item.image.attached? %>
+                  <%= image_tag item.image, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300", alt: item.name %>
+                <% end %>
+              </div>
+              <div class="p-3">
+                <p class="text-sm font-semibold text-gray-900 truncate"><%= item.name %></p>
+                <p class="text-xs text-gray-500"><%= Item::CATEGORIES[item.category] %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-sm"><%= t(".no_items") %></p>
+      <%= link_to t(".add_item"), new_web_item_path, class: "mt-2 inline-block text-sm font-medium text-amber-600 hover:text-amber-700" %>
+    </div>
+  <% end %>
+</div>

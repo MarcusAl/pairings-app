@@ -1,54 +1,52 @@
 <div class="space-y-8">
   <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold">Dashboard</h1>
+    <h1 class="text-xl font-bold text-gray-900"><%= t(".title") %></h1>
     <div class="flex gap-2">
-      <%= link_to "Add Item", new_web_item_path, class: "inline-flex items-center rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700" %>
-      <%= link_to "Start Pairing", new_web_pairing_path, class: "inline-flex items-center rounded-lg bg-white px-3 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50" %>
+      <%= link_to t(".add_item"), new_web_item_path, class: "rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white hover:bg-amber-700" %>
+      <%= link_to t(".new_pairing"), new_web_pairing_path, class: "rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" %>
     </div>
   </div>
 
-  <section>
-    <h2 class="text-lg font-semibold mb-3">Recent Items</h2>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="bg-white rounded-xl border border-gray-100 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900"><%= current_user.items.count %></p>
+      <p class="text-xs text-gray-500 mt-1"><%= t(".items_count") %></p>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-100 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900"><%= current_user.pairings.count %></p>
+      <p class="text-xs text-gray-500 mt-1"><%= t(".pairings_count") %></p>
+    </div>
+  </div>
+
+  <section class="space-y-3">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-900"><%= t(".recent_items") %></h2>
+      <%= link_to t(".view_all"), web_items_path, class: "text-sm text-amber-600 hover:text-amber-700" %>
+    </div>
     <% if @recent_items.any? %>
-      <div class="grid gap-3">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <% @recent_items.each do |item| %>
-          <div class="flex items-center gap-3 rounded-lg bg-white p-3 border border-gray-200">
-            <% if item.image.attached? %>
-              <%= image_tag item.image, class: "w-12 h-12 rounded-lg object-cover", alt: item.name %>
-            <% else %>
-              <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">No img</div>
-            <% end %>
-            <div class="flex-1 min-w-0">
-              <p class="font-medium truncate"><%= item.name %></p>
-              <p class="text-sm text-gray-500"><%= item.category.capitalize %> &middot; <%= item.price_range %></p>
-            </div>
-          </div>
+          <%= render "web/shared/item_card", item: item %>
         <% end %>
       </div>
     <% else %>
-      <p class="text-sm text-gray-500">No items yet. Add your first item to get started.</p>
+      <p class="text-sm text-gray-500"><%= t(".no_items") %></p>
     <% end %>
   </section>
 
-  <section>
-    <h2 class="text-lg font-semibold mb-3">Recent Pairings</h2>
+  <section class="space-y-3">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-900"><%= t(".recent_pairings") %></h2>
+      <%= link_to t(".view_all"), web_pairings_path, class: "text-sm text-amber-600 hover:text-amber-700" %>
+    </div>
     <% if @recent_pairings.any? %>
-      <div class="grid gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <% @recent_pairings.each do |pairing| %>
-          <div class="rounded-lg bg-white p-4 border border-gray-200">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="font-medium"><%= pairing.item1.name %></span>
-              <span class="text-gray-400">&amp;</span>
-              <span class="font-medium"><%= pairing.item2.name %></span>
-            </div>
-            <% if pairing.ai_reasoning.present? %>
-              <p class="text-sm text-gray-600 line-clamp-2"><%= pairing.ai_reasoning %></p>
-            <% end %>
-          </div>
+          <%= render "web/shared/pairing_card", pairing: pairing %>
         <% end %>
       </div>
     <% else %>
-      <p class="text-sm text-gray-500">No pairings yet. Start pairing your items with AI.</p>
+      <p class="text-sm text-gray-500"><%= t(".no_pairings") %></p>
     <% end %>
   </section>
 </div>

@@ -12,7 +12,7 @@ module Web
 
       if @user.save
         log_in(@user)
-        redirect_to web_root_path, notice: 'Account created.'
+        redirect_to web_root_path, notice: t('.notice')
       else
         render :new, status: :unprocessable_entity
       end

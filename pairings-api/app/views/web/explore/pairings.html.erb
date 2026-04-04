@@ -1,0 +1,15 @@
+<div class="space-y-6">
+  <h1 class="text-xl font-bold text-gray-900"><%= t(".title") %></h1>
+
+  <% if @pairings.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <% @pairings.each do |pairing| %>
+        <%= render "web/shared/pairing_card", pairing: pairing, path: web_explore_pairings_path %>
+      <% end %>
+    </div>
+
+    <%= render "web/shared/pagination" %>
+  <% else %>
+    <p class="text-center py-12 text-sm text-gray-500"><%= t(".no_pairings") %></p>
+  <% end %>
+</div>

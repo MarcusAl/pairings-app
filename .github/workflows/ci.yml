@@ -6,6 +6,36 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+          working-directory: ./pairings-api
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref || 'main' }} --depth=1
+
+      - name: Lint changed Ruby files with RuboCop
+        working-directory: ./pairings-api
+        run: |
+          BASE=${{ github.event.pull_request.base.ref || 'main' }}
+          FILES=$(git diff --name-only --diff-filter=d origin/$BASE...HEAD -- '*.rb' | sed 's|^pairings-api/||')
+          if [ -z "$FILES" ]; then
+            echo "No Ruby files changed — skipping lint."
+          else
+            echo "$FILES" | xargs bundle exec rubocop --force-exclusion
+          fi
+
   scan_ruby:
     runs-on: ubuntu-latest
 
@@ -43,9 +73,6 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config
-
       - name: Checkout code
         uses: actions/checkout@v4
 

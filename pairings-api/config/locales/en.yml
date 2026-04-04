@@ -28,4 +28,128 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  language_name: "English"
+  web:
+    base:
+      authenticate:
+        alert: "Please sign in."
+    shared:
+      navbar:
+        brand: "Pairings"
+        dashboard: "Dashboard"
+        items: "Items"
+        pairings: "Pairings"
+        explore: "Explore"
+        home: "Home"
+        sign_out: "Sign out"
+      item_card:
+        public: "Public"
+      pairing_card:
+        ai: "AI"
+        public: "Public"
+    sessions:
+      new:
+        title: "Sign in"
+        subtitle: "Welcome back to Pairings"
+        sign_in: "Sign in"
+        or: "or"
+        continue_with_auth0: "Continue with Auth0"
+        no_account_html: "Don't have an account? %{link}"
+        sign_up: "Sign up"
+      create:
+        notice: "Signed in."
+        alert: "Invalid email or password."
+      destroy:
+        notice: "Signed out."
+    registrations:
+      new:
+        title: "Create account"
+        subtitle: "Start pairing your favourite foods and drinks"
+        password_label: "Password (12 characters minimum)"
+        create_account: "Create account"
+        or: "or"
+        continue_with_auth0: "Continue with Auth0"
+        have_account_html: "Already have an account? %{link}"
+        sign_in: "Sign in"
+      create:
+        notice: "Account created."
+    dashboard:
+      index:
+        title: "Dashboard"
+        add_item: "Add item"
+        new_pairing: "New pairing"
+        items_count: "Items"
+        pairings_count: "Pairings"
+        recent_items: "Recent Items"
+        recent_pairings: "Recent Pairings"
+        view_all: "View all"
+        no_items: "No items yet. Add your first item to get started."
+        no_pairings: "No pairings yet. Start pairing your items with AI."
+    items:
+      index:
+        title: "My Items"
+        add_item: "Add item"
+        search_placeholder: "Search items..."
+        all_categories: "All categories"
+        filter: "Filter"
+        no_items: "No items yet."
+        add_first_item: "Add your first item"
+      show:
+        back: "Items"
+        edit: "Edit"
+        delete: "Delete"
+        delete_confirm: "Delete this item?"
+        public: "Public"
+        private: "Private"
+        pairings: "Pairings"
+      new:
+        title: "New item"
+      edit:
+        title: "Edit item"
+      form:
+        current_image: "Current image"
+        select_category: "Select category"
+        select_range: "Select range"
+        subcategory_placeholder: "e.g. red wine, steak, lager"
+        flavor_profiles: "Flavor profiles"
+        primary_flavor_placeholder: "Must be one of the selected flavors above"
+        make_public: "Make this item public"
+      create:
+        notice: "Item created."
+      update:
+        notice: "Item updated."
+      destroy:
+        notice: "Item deleted."
+    pairings:
+      index:
+        title: "My Pairings"
+        new_pairing: "New pairing"
+        no_pairings: "No pairings yet."
+        create_first: "Create your first pairing"
+      show:
+        back: "Pairings"
+        delete: "Delete"
+        delete_confirm: "Delete this pairing?"
+        strength: "Strength"
+        confidence: "Confidence"
+        ai_reasoning: "AI Reasoning"
+        notes: "Notes"
+        ai_generated: "AI Generated"
+        public: "Public"
+        private: "Private"
+      new:
+        title: "New pairing"
+        subtitle: "Select an item to pair. Our AI will analyze it and suggest the perfect match."
+        no_items: "You need items before creating a pairing."
+        add_item: "Add an item"
+      create:
+        notice: "Pairing is being generated..."
+      destroy:
+        notice: "Pairing deleted."
+    explore:
+      items:
+        title: "Explore Items"
+        no_items: "No public items yet."
+      pairings:
+        title: "Explore Pairings"
+        no_pairings: "No public pairings yet."

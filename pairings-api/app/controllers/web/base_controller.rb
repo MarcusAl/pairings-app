@@ -1,13 +1,17 @@
 module Web
   class BaseController < ActionController::Base
+    include Pagy::Backend
+
     protect_from_forgery with: :exception
     layout 'web'
 
+    before_action :set_locale
     before_action :set_current_request_details
     before_action :restore_session
     before_action :authenticate
 
-    helper_method :current_user
+    helper Pagy::Frontend
+    helper_method :current_user, :available_locales
 
     private
 
@@ -22,7 +26,7 @@ module Web
     end
 
     def authenticate
-      redirect_to web_login_path, alert: 'Please sign in.' unless current_user
+      redirect_to web_login_path, alert: t('web.base.authenticate.alert') unless current_user
     end
 
     def log_in(user)
@@ -39,6 +43,20 @@ module Web
 
     def current_user
       Current.user
+    end
+
+    def set_locale
+      locale = params[:locale] || session[:locale] || I18n.default_locale
+      I18n.locale = I18n.available_locales.include?(locale.to_sym) ? locale.to_sym : I18n.default_locale
+      session[:locale] = I18n.locale
+    end
+
+    def available_locales
+      I18n.available_locales
+    end
+
+    def default_url_options
+      { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
     end
 
     def set_current_request_details
