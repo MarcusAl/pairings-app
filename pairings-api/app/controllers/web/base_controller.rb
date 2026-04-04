@@ -52,7 +52,9 @@ module Web
     end
 
     def available_locales
-      I18n.available_locales
+      @available_locales ||= I18n.available_locales.select do |loc|
+        I18n.exists?(:language_name, loc)
+      end
     end
 
     def default_url_options

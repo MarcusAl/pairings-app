@@ -1,5 +1,5 @@
 <div class="space-y-6">
-  <h1 class="text-xl font-bold text-gray-900"><%= t(".title") %></h1>
+  <h1 class="heading-page"><%= t(".title") %></h1>
 
   <% if @items.any? %>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -10,6 +10,6 @@
 
     <%= render "web/shared/pagination" %>
   <% else %>
-    <p class="text-center py-12 text-sm text-gray-500"><%= t(".no_items") %></p>
+    <p class="empty-state"><%= t(".no_items") %></p>
   <% end %>
 </div>
