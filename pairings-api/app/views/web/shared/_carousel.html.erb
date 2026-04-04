@@ -1,11 +1,31 @@
 <% if images.any? && images.first[:url].present? %>
+  <%# Mobile: 1 image per slide %>
+  <div class="sm:hidden carousel" data-controller="carousel" data-carousel-interval-value="5000"
+       data-action="touchstart->carousel#pause touchend->carousel#resume">
+    <div class="carousel__track" data-carousel-target="track">
+      <% images.each do |image| %>
+        <div class="carousel__slide" data-carousel-target="slide">
+          <div class="carousel__slide-item relative rounded-lg overflow-hidden">
+            <%= image_tag image[:url], alt: image[:alt], class: "carousel__image", loading: "lazy" %>
+            <% if image[:credit].present? %>
+              <div class="carousel__credit">
+                <%= link_to image[:credit], "#{image[:credit_url]}?utm_source=pairings_app&utm_medium=referral", target: "_blank", rel: "noopener noreferrer" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# Desktop: 3 images per slide %>
   <% slides = images.each_slice(3).to_a %>
-  <div class="carousel" data-controller="carousel" data-carousel-interval-value="5000"
-       data-action="mouseenter->carousel#pause mouseleave->carousel#resume touchstart->carousel#pause touchend->carousel#resume">
+  <div class="hidden sm:block carousel" data-controller="carousel" data-carousel-interval-value="5000"
+       data-action="mouseenter->carousel#pause mouseleave->carousel#resume">
     <div class="carousel__track" data-carousel-target="track">
       <% slides.each do |slide_images| %>
         <div class="carousel__slide" data-carousel-target="slide">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-3 gap-3">
             <% slide_images.each do |image| %>
               <div class="carousel__slide-item relative rounded-lg overflow-hidden">
                 <%= image_tag image[:url], alt: image[:alt], class: "carousel__image", loading: "lazy" %>
