@@ -4,8 +4,8 @@
     <%= link_to t(".add_item"), new_web_item_path, class: "btn btn--primary" %>
   </div>
 
-  <%= form_with url: web_items_path, method: :get, class: "flex gap-2", data: { turbo_frame: "_top" } do |f| %>
-    <%= f.search_field :search, value: params[:search], placeholder: t(".search_placeholder"), class: "form-input mt-0 flex-1" %>
+  <%= form_with url: web_items_path, method: :get, class: "grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-2", data: { turbo_frame: "_top" } do |f| %>
+    <%= f.search_field :search, value: params[:search], placeholder: t(".search_placeholder"), class: "form-input mt-0" %>
     <%= f.select :by_category, options_for_select(Item::CATEGORIES.map { |k, v| [v, k] }, params[:by_category]),
         { include_blank: t(".all_categories") },
         class: "form-select mt-0" %>

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "preview", "placeholder"]
+  static targets = ["input", "preview", "container"]
 
   preview() {
     const file = this.inputTarget.files[0]
@@ -10,9 +10,8 @@ export default class extends Controller {
     const reader = new FileReader()
     reader.onload = (e) => {
       this.previewTarget.src = e.target.result
-      this.previewTarget.classList.remove("hidden")
-      if (this.hasPlaceholderTarget) {
-        this.placeholderTarget.classList.add("hidden")
+      if (this.hasContainerTarget) {
+        this.containerTarget.classList.remove("hidden")
       }
     }
     reader.readAsDataURL(file)
