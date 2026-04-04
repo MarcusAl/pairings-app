@@ -14,22 +14,21 @@
     <%= f.label :image, class: "form-label" %>
     <%= f.file_field :image, accept: "image/png,image/jpeg", class: "form-file",
         data: { image_preview_target: "input", action: "change->image-preview#preview" } %>
-    <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden" style="background: var(--border-card);">
-      <% if item.image.attached? %>
+    <% if item.image.attached? %>
+      <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden" style="background: var(--border-card);">
         <%= image_tag item.image, class: "w-full h-full object-cover", alt: t("web.items.form.current_image"),
             data: { image_preview_target: "preview" } %>
-      <% else %>
-        <img class="w-full h-full object-cover hidden" data-image-preview-target="preview" alt="">
-        <div class="w-full h-full flex items-center justify-center" data-image-preview-target="placeholder">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" style="color: var(--border-subtle);" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/></svg>
-        </div>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden hidden" style="background: var(--border-card);" data-image-preview-target="container">
+        <img class="w-full h-full object-cover" data-image-preview-target="preview" alt="">
+      </div>
+    <% end %>
   </div>
 
   <div>
-    <%= f.label :name, class: "form-label" %>
-    <%= f.text_field :name, required: true, class: "form-input" %>
+    <%= f.label :name, class: "form-label form-label--required" %>
+    <%= f.text_field :name, required: true, placeholder: " ", class: "form-input" %>
   </div>
 
   <div>
@@ -39,14 +38,14 @@
 
   <div class="grid grid-cols-2 gap-4">
     <div>
-      <%= f.label :category, class: "form-label" %>
+      <%= f.label :category, class: "form-label form-label--required" %>
       <%= f.select :category, options_for_select(Item::CATEGORIES.map { |k, v| [v, k] }, item.category),
           { prompt: t("web.items.form.select_category") },
           { required: true, class: "form-select" } %>
     </div>
 
     <div>
-      <%= f.label :price_range, class: "form-label" %>
+      <%= f.label :price_range, class: "form-label form-label--required" %>
       <%= f.select :price_range, options_for_select(Item::PRICE_RANGES.map { |k, v| ["#{k} — #{v}", k] }, item.price_range),
           { prompt: t("web.items.form.select_range") },
           { required: true, class: "form-select" } %>
@@ -71,7 +70,7 @@
   </fieldset>
 
   <div>
-    <%= f.label :primary_flavor_profile, class: "form-label" %>
+    <%= f.label :primary_flavor_profile, class: "form-label form-label--required" %>
     <%= f.text_field :primary_flavor_profile, required: true, placeholder: t("web.items.form.primary_flavor_placeholder"), class: "form-input" %>
   </div>
 

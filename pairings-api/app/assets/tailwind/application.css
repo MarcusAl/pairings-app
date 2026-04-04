@@ -131,8 +131,13 @@
   color: var(--text-primary);
 }
 
+.form-label--required::after {
+  content: ' *';
+  color: var(--color-leather);
+}
+
 .form-input {
-  @apply mt-1 block w-full rounded-lg border px-3 py-2 text-sm;
+  @apply mt-1 block w-full rounded-lg border px-3 py-2 text-sm transition-colors;
   border-color: var(--border-subtle);
   background: var(--bg-card);
 }
@@ -143,8 +148,12 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-olive) 25%, transparent);
 }
 
+.form-input:required:valid:not(:placeholder-shown) {
+  border-color: var(--color-olive);
+}
+
 .form-select {
-  @apply mt-1 block w-full rounded-lg border px-3 py-2 text-sm;
+  @apply mt-1 block w-full rounded-lg border px-3 py-2 text-sm transition-colors;
   border-color: var(--border-subtle);
   background: var(--bg-card);
 }
@@ -153,6 +162,10 @@
   border-color: var(--border-focus);
   outline: none;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-olive) 25%, transparent);
+}
+
+.form-select:required:valid {
+  border-color: var(--color-olive);
 }
 
 .form-checkbox {
@@ -384,8 +397,10 @@
 
 .stat-card {
   @apply rounded-xl p-4 text-center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
+  background: color-mix(in srgb, var(--bg-card) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-card) 50%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .pairing-separator {
