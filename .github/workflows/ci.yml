@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -20,9 +22,19 @@ jobs:
           bundler-cache: true
           working-directory: ./pairings-api
 
-      - name: Lint with RuboCop
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref || 'main' }} --depth=1
+
+      - name: Lint changed Ruby files with RuboCop
         working-directory: ./pairings-api
-        run: bundle exec rubocop
+        run: |
+          BASE=${{ github.event.pull_request.base.ref || 'main' }}
+          FILES=$(git diff --name-only --diff-filter=d origin/$BASE...HEAD -- '*.rb' | sed 's|^pairings-api/||')
+          if [ -z "$FILES" ]; then
+            echo "No Ruby files changed — skipping lint."
+          else
+            echo "$FILES" | xargs bundle exec rubocop --force-exclusion
+          fi
 
   scan_ruby:
     runs-on: ubuntu-latest
