@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(auth_params)
+    if (user = User.authenticate_by(auth_params))
       @session = user.sessions.create!(
         expires_at: Session.generate_expiration
       )
@@ -36,13 +36,11 @@ class SessionsController < ApplicationController
 
   def set_session
     @session = current_user.sessions.find(params[:id])
-
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Session not found' }, status: :not_found 
+    render json: { error: 'Session not found' }, status: :not_found
   end
 
   def auth_params
     params.slice(:email, :password).permit(:email, :password)
   end
 end
-

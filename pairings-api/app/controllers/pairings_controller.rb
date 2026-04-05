@@ -1,5 +1,5 @@
 class PairingsController < ApplicationController
-  before_action :set_pairing, only: [:show, :destroy, :update]
+  before_action :set_pairing, only: %i[show destroy update]
 
   has_scope :visible_to
   has_scope :by_strength
@@ -8,7 +8,7 @@ class PairingsController < ApplicationController
   has_scope :private_pairings, type: :boolean
 
   def index
-    pagy, pairings = pagy(apply_scopes(Pairing).all.order(created_at: :desc))
+    pagy, pairings = pagy(apply_scopes(Pairing).order(created_at: :desc))
 
     render json: { data: pairings, meta: pagy_metadata(pagy) }
   end
@@ -18,22 +18,21 @@ class PairingsController < ApplicationController
   end
 
   def create
-    if params[:item1_id].present? && item = current_user.items.find(params[:item1_id])
+    if params[:item1_id].present? && (item = current_user.items.find(params[:item1_id]))
       PairingJob.perform_now(item, current_user)
 
       render json: { data: item.id }, status: :created
     else
-      render json: { error: ["Item 1 must exist"] }, status: :unprocessable_content
+      render json: { error: ['Item 1 must exist'] }, status: :unprocessable_content
     end
   rescue ActiveRecord::RecordInvalid, ActionController::ParameterMissing, ActiveRecord::NotNullViolation
     render json: { error: 'Bad Request' }, status: :bad_request
-  end 
+  end
 
   def update
     @pairing.update!(pairing_params)
 
     render json: { data: @pairing }, status: :ok
-
   rescue ActiveRecord::RecordNotFound
     render json: { error: 'Not Found' }, status: :not_found
   rescue ActiveRecord::RecordInvalid, ActionController::ParameterMissing, ActiveRecord::NotNullViolation
@@ -43,7 +42,7 @@ class PairingsController < ApplicationController
   def destroy
     @pairing.destroy!
     render json: { data: { message: 'Pairing deleted' } }, status: :ok
-  rescue ActiveRecord::RecordNotDestroyed => e
+  rescue ActiveRecord::RecordNotDestroyed
     render json: { error: 'Failed to delete' }, status: :unprocessable_content
   end
 
