@@ -26,14 +26,11 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Item < ApplicationRecord
-  class ImageDownloadError < StandardError; end
-  class ImageAttachmentError < StandardError; end
-
   belongs_to :user
   has_one_attached :image
 
-  has_many :pairings_as_item1, class_name: 'Pairing', foreign_key: 'item1_id', dependent: :destroy
-  has_many :pairings_as_item2, class_name: 'Pairing', foreign_key: 'item2_id', dependent: :destroy
+  has_many :pairings_as_item1, class_name: 'Pairing', foreign_key: 'item1_id', dependent: :destroy, inverse_of: :item1
+  has_many :pairings_as_item2, class_name: 'Pairing', foreign_key: 'item2_id', dependent: :destroy, inverse_of: :item2
 
   CATEGORIES = {
     'main' => 'Main',
@@ -47,14 +44,14 @@ class Item < ApplicationRecord
     'tea' => 'Tea',
     'coffee' => 'Coffee',
     'other' => 'Other'
-  }
+  }.freeze
 
   PRICE_RANGES = {
     '$' => 'Budget friendly (Under $15)',
     '$$' => 'Moderate ($15-30)',
     '$$$' => 'High-end ($30-60)',
     '$$$$' => 'Luxury ($60+)'
-  }
+  }.freeze
 
   FIELDS = %i[
     name
@@ -116,33 +113,7 @@ class Item < ApplicationRecord
   end
 
   def attach_image_from_url(url)
-    return unless url.present?
-
-    require 'open-uri'
-    begin
-      downloaded_image = URI.open(url)
-      content_type = downloaded_image.content_type
-
-      extension = case content_type
-                  when 'image/png' then '.png'
-                  else '.jpg'
-                  end
-
-      image.attach(
-        io: downloaded_image,
-        filename: "item_#{id}_#{Time.current.to_i}#{extension}",
-        content_type: content_type,
-        identify: true
-      )
-    rescue OpenURI::HTTPError => e
-      raise ImageDownloadError, "HTTP error downloading image (#{e.message})"
-    rescue URI::InvalidURIError => e
-      raise ImageDownloadError, "Invalid URL format (#{e.message})"
-    rescue ActiveStorage::IntegrityError => e
-      raise ImageProcessingError, "File integrity error (#{e.message})"
-    rescue StandardError => e
-      raise ImageProcessingError, "Unexpected error processing image (#{e.message})"
-    end
+    ImageAttacher.call(self, url)
   end
 
   private

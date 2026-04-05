@@ -16,7 +16,7 @@ RSpec.describe 'Web::Items', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'only shows items belonging to the current user' do
+    it 'only shows items belonging to the current user', :aggregate_failures do
       item
       other_item = create(:item)
       sign_in(user)
@@ -27,7 +27,7 @@ RSpec.describe 'Web::Items', type: :request do
       expect(response.body).not_to include(other_item.name)
     end
 
-    it 'filters by category' do
+    it 'filters by category', :aggregate_failures do
       create(:item, user: user, category: 'wine', name: 'Pinot Noir')
       create(:item, user: user, category: 'beer', name: 'Pale Ale')
       sign_in(user)
@@ -40,7 +40,7 @@ RSpec.describe 'Web::Items', type: :request do
   end
 
   describe 'GET /web/items/:id' do
-    it 'renders the item detail' do
+    it 'renders the item detail', :aggregate_failures do
       sign_in(user)
       get web_item_path(item)
       expect(response).to have_http_status(:ok)
@@ -75,7 +75,7 @@ RSpec.describe 'Web::Items', type: :request do
       }
     end
 
-    it 'creates an item and redirects to show' do
+    it 'creates an item and redirects to show', :aggregate_failures do
       sign_in(user)
 
       expect { post web_items_path, params: valid_params }.to change(Item, :count).by(1)
@@ -101,7 +101,7 @@ RSpec.describe 'Web::Items', type: :request do
   end
 
   describe 'PATCH /web/items/:id' do
-    it 'updates the item and redirects to show' do
+    it 'updates the item and redirects to show', :aggregate_failures do
       sign_in(user)
 
       patch web_item_path(item), params: { item: { name: 'Updated Name' } }
@@ -120,7 +120,7 @@ RSpec.describe 'Web::Items', type: :request do
   end
 
   describe 'DELETE /web/items/:id' do
-    it 'destroys the item and redirects to index' do
+    it 'destroys the item and redirects to index', :aggregate_failures do
       sign_in(user)
       item
 
