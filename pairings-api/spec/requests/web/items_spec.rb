@@ -32,7 +32,7 @@ RSpec.describe 'Web::Items', type: :request do
       create(:item, user: user, category: 'beer', name: 'Pale Ale')
       sign_in(user)
 
-      get web_items_path, params: { by_category: 'wine' }
+      get web_items_path, params: { by_category: ['wine'] }
 
       expect(response.body).to include('Pinot Noir')
       expect(response.body).not_to include('Pale Ale')
