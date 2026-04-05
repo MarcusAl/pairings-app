@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Discover perfect food and drink pairings powered by AI.">
+  <meta name="theme-color" content="#00291C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
@@ -11,9 +17,9 @@
 </head>
 <body class="h-full pb-16 sm:pb-0" style="background: var(--bg-page); color: var(--text-primary);">
   <%= render "web/shared/navbar" %>
+  <%= render "web/shared/flash" %>
 
   <main class="mx-auto max-w-lg px-4 py-6 pb-20 sm:max-w-2xl sm:pb-6 lg:max-w-4xl">
-    <%= render "web/shared/flash" %>
     <%= yield %>
   </main>
 </body>

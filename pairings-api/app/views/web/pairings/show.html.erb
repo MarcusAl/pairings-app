@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="space-y-6" data-controller="animation">
   <div class="flex items-center justify-between">
     <%= link_to web_pairings_path, class: "back-link" do %>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -11,8 +11,8 @@
 
   <div class="card">
     <div class="flex">
-      <% [@pairing.item1, @pairing.item2].each do |item| %>
-        <%= link_to web_item_path(item), class: "w-1/2 group" do %>
+      <% [@pairing.item1, @pairing.item2].each_with_index do |item, idx| %>
+        <%= link_to web_item_path(item), class: "w-1/2 group animate--scale-in", data: { animation_target: "item", animation_delay: idx * 150 } do %>
           <div class="aspect-square overflow-hidden" style="background: var(--border-card);">
             <% if item.image.attached? %>
               <%= image_tag item.image, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300", alt: item.name %>
@@ -32,7 +32,8 @@
           <span class="text-sm font-medium" style="color: var(--text-primary);"><%= t(".strength") %></span>
           <div class="flex gap-1">
             <% 5.times do |i| %>
-              <div class="w-8 h-2 strength-bar <%= 'strength-bar--filled' if i < @pairing.strength %>"></div>
+              <div class="w-8 h-2 strength-bar <%= 'strength-bar--filled animate--fill' if i < @pairing.strength %>"
+                   <%= "data-animation-target=item data-animation-delay=#{300 + i * 100}".html_safe if i < @pairing.strength %>></div>
             <% end %>
           </div>
           <span class="text-detail"><%= @pairing.strength %>/5</span>

@@ -1,0 +1,15 @@
+{
+  "name": "Pairings",
+  "short_name": "Pairings",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F0E7C2",
+  "theme_color": "#00291C",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
