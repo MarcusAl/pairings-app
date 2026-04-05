@@ -1,49 +1,48 @@
-<%= link_to (defined?(path) ? path : web_pairing_path(pairing)), class: "block card card--hover" do %>
-  <div class="flex">
-    <div class="w-1/2 aspect-square overflow-hidden" style="background: var(--border-card);">
-      <% if pairing.item1.image.attached? %>
-        <%= image_tag pairing.item1.image, class: "w-full h-full object-cover", alt: pairing.item1.name %>
-      <% end %>
-    </div>
-    <div class="w-1/2 aspect-square overflow-hidden" style="background: var(--border-card);">
-      <% if pairing.item2.image.attached? %>
-        <%= image_tag pairing.item2.image, class: "w-full h-full object-cover", alt: pairing.item2.name %>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="card__body">
-    <div class="flex items-center gap-1.5 text-sm font-semibold" style="color: var(--text-primary);">
-      <span class="truncate"><%= pairing.item1.name %></span>
-      <span class="pairing-separator">&times;</span>
-      <span class="truncate"><%= pairing.item2.name %></span>
-    </div>
-
-    <% if pairing.strength %>
-      <div class="flex items-center gap-1.5">
-        <div class="flex gap-0.5">
-          <% 5.times do |i| %>
-            <div class="w-5 h-1.5 rounded-full strength-bar <%= 'strength-bar--filled' if i < pairing.strength %>"></div>
-          <% end %>
-        </div>
-        <span class="text-detail"><%= pairing.strength %>/5</span>
+<article>
+  <%= link_to (defined?(path) ? path : web_pairing_path(pairing)), class: "block card card--hover" do %>
+    <div class="pairing__images">
+      <div class="pairing__image">
+        <% if pairing.item1.image.attached? %>
+          <%= image_tag pairing.item1.image, class: "w-full h-full object-cover", alt: pairing.item1.name %>
+        <% end %>
+        <span class="card__title--overlay text-sm"><%= pairing.item1.name %></span>
       </div>
-    <% end %>
-
-    <% if pairing.ai_reasoning.present? %>
-      <p class="text-xs line-clamp-2" style="color: var(--text-secondary);"><%= pairing.ai_reasoning %></p>
-    <% end %>
-
-    <div class="flex items-center gap-2 text-detail">
-      <% if pairing.ai? %>
-        <span class="badge--ai">
-          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/></svg>
-          <%= t("web.shared.pairing_card.ai") %>
-        </span>
-      <% end %>
-      <% if pairing.public? %>
-        <span class="badge--public"><%= t("web.shared.pairing_card.public") %></span>
-      <% end %>
+      <div class="pairing__connector" aria-hidden="true">&times;</div>
+      <div class="pairing__image">
+        <% if pairing.item2.image.attached? %>
+          <%= image_tag pairing.item2.image, class: "w-full h-full object-cover", alt: pairing.item2.name %>
+        <% end %>
+        <span class="card__title--overlay text-sm"><%= pairing.item2.name %></span>
+      </div>
     </div>
-  </div>
-<% end %>
+
+    <div class="card__body">
+      <% if pairing.strength %>
+        <div class="strength-meter">
+          <div class="strength-dots" role="img" aria-label="<%= t("web.shared.pairing_card.strength", count: pairing.strength) %>">
+            <% 5.times do |i| %>
+              <div class="strength-dot <%= 'strength-dot--filled' if i < pairing.strength %>"></div>
+            <% end %>
+          </div>
+          <span class="strength-label"><%= pairing.strength %>/5</span>
+        </div>
+      <% end %>
+
+      <% if pairing.ai_reasoning.present? %>
+        <p class="text-xs line-clamp-2 text-body"><%= pairing.ai_reasoning %></p>
+      <% end %>
+
+      <div class="flex items-center gap-2 text-detail">
+        <% if pairing.ai? %>
+          <span class="badge--ai">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/></svg>
+            <%= t("web.shared.pairing_card.ai") %>
+          </span>
+        <% end %>
+        <% if pairing.public? %>
+          <span class="badge--public"><%= t("web.shared.pairing_card.public") %></span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</article>

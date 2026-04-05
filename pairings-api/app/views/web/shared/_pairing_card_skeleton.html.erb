@@ -1,13 +1,14 @@
 <div class="card">
-  <div class="flex">
-    <div class="w-1/2 aspect-square skeleton"></div>
-    <div class="w-1/2 aspect-square skeleton"></div>
+  <div class="pairing__images">
+    <div class="pairing__image skeleton"></div>
+    <div class="pairing__connector skeleton"></div>
+    <div class="pairing__image skeleton"></div>
   </div>
-  <div class="card__body space-y-2">
-    <div class="skeleton h-4 w-3/4 rounded"></div>
-    <div class="flex gap-0.5">
+  <div class="card__body">
+    <div class="skeleton h-5 w-3/4 rounded"></div>
+    <div class="flex gap-1">
       <% 5.times do %>
-        <div class="skeleton w-5 h-1.5 rounded-full"></div>
+        <div class="skeleton rounded-full" style="width: 0.625rem; height: 0.625rem;"></div>
       <% end %>
     </div>
     <div class="skeleton h-3 w-full rounded"></div>

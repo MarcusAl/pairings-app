@@ -2,7 +2,8 @@ module Web
   class ExploreController < BaseController
     skip_before_action :authenticate
 
-    has_scope :by_category
+    has_scope :by_category, type: :array
+    has_scope :by_flavor_profile, type: :array
     has_scope :search
 
     def items

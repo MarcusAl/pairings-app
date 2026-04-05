@@ -9,15 +9,19 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <title>Pairings</title>
 </head>
-<body class="h-full pb-16 sm:pb-0" style="background: var(--bg-page); color: var(--text-primary);">
+<body class="h-full pb-16 sm:pb-0 bg-page">
   <%= render "web/shared/navbar" %>
   <%= render "web/shared/flash" %>
+  <%= yield :topbar if content_for?(:topbar) %>
 
   <main class="mx-auto max-w-lg px-4 py-6 pb-20 sm:max-w-2xl sm:pb-6 lg:max-w-4xl">
     <%= yield %>

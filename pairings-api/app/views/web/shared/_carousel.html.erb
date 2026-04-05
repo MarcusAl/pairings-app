@@ -1,40 +1,42 @@
 <% if images.any? && images.first[:url].present? %>
   <%# Mobile: 1 image per slide %>
-  <div class="sm:hidden carousel" data-controller="carousel" data-carousel-interval-value="5000"
+  <section class="sm:hidden carousel" aria-label="<%= t("web.shared.carousel.label") %>"
+       data-controller="carousel" data-carousel-interval-value="5000"
        data-action="touchstart->carousel#pause touchend->carousel#resume">
     <div class="carousel__track" data-carousel-target="track">
       <% images.each do |image| %>
         <div class="carousel__slide" data-carousel-target="slide">
-          <div class="carousel__slide-item relative rounded-lg overflow-hidden">
+          <figure class="carousel__slide-item relative rounded overflow-hidden">
             <%= image_tag image[:url], alt: image[:alt], class: "carousel__image", loading: "lazy" %>
             <% if image[:credit].present? %>
-              <div class="carousel__credit">
+              <figcaption class="carousel__credit">
                 <%= link_to image[:credit], "#{image[:credit_url]}?utm_source=pairings_app&utm_medium=referral", target: "_blank", rel: "noopener noreferrer" %>
-              </div>
+              </figcaption>
             <% end %>
-          </div>
+          </figure>
         </div>
       <% end %>
     </div>
-  </div>
+  </section>
 
   <%# Desktop: 3 images per slide %>
   <% slides = images.each_slice(3).to_a %>
-  <div class="hidden sm:block carousel" data-controller="carousel" data-carousel-interval-value="5000"
+  <section class="hidden sm:block carousel" aria-label="<%= t("web.shared.carousel.label") %>"
+       data-controller="carousel" data-carousel-interval-value="5000"
        data-action="mouseenter->carousel#pause mouseleave->carousel#resume">
     <div class="carousel__track" data-carousel-target="track">
       <% slides.each do |slide_images| %>
         <div class="carousel__slide" data-carousel-target="slide">
           <div class="grid grid-cols-3 gap-3">
             <% slide_images.each do |image| %>
-              <div class="carousel__slide-item relative rounded-lg overflow-hidden">
+              <figure class="carousel__slide-item relative rounded overflow-hidden">
                 <%= image_tag image[:url], alt: image[:alt], class: "carousel__image", loading: "lazy" %>
                 <% if image[:credit].present? %>
-                  <div class="carousel__credit">
+                  <figcaption class="carousel__credit">
                     <%= link_to image[:credit], "#{image[:credit_url]}?utm_source=pairings_app&utm_medium=referral", target: "_blank", rel: "noopener noreferrer" %>
-                  </div>
+                  </figcaption>
                 <% end %>
-              </div>
+              </figure>
             <% end %>
           </div>
         </div>
@@ -42,12 +44,12 @@
     </div>
 
     <% if slides.size > 1 %>
-      <button class="carousel__btn carousel__btn--prev" data-action="carousel#previous" aria-label="Previous">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <button type="button" class="carousel__btn carousel__btn--prev" data-action="carousel#previous" aria-label="<%= t("web.shared.carousel.previous") %>">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
       </button>
-      <button class="carousel__btn carousel__btn--next" data-action="carousel#next" aria-label="Next">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <button type="button" class="carousel__btn carousel__btn--next" data-action="carousel#next" aria-label="<%= t("web.shared.carousel.next") %>">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </button>
     <% end %>
-  </div>
+  </section>
 <% end %>

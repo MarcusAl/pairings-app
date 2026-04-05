@@ -1,5 +1,6 @@
 class UnsplashClient
   CACHE_KEY_PREFIX = 'unsplash_food_images'.freeze
+  CACHED_KEY_PREFIX = 'unsplash_food_images_cached'.freeze
   CACHE_DURATION = 1.hour
   API_URL = 'https://api.unsplash.com/photos/random'.freeze
 
@@ -11,19 +12,21 @@ class UnsplashClient
 
   def self.fetch_images(count)
     access_key = Rails.application.credentials.dig(:unsplash, :access_key)
-    return fallback_images unless access_key
+    return cached_or_fallback(count) unless access_key
 
     response = request_photos(access_key, count)
-    return fallback_images unless response.is_a?(Net::HTTPSuccess)
+    return cached_or_fallback(count) unless response.is_a?(Net::HTTPSuccess)
 
-    parse_photos(response.body)
+    images = parse_photos(response.body)
+    Rails.cache.write("#{CACHED_KEY_PREFIX}/#{count}", images)
+    images
   rescue StandardError
-    fallback_images
+    cached_or_fallback(count)
   end
 
   def self.request_photos(access_key, count)
     uri = URI(API_URL)
-    uri.query = URI.encode_www_form(query: 'gourmet food plating', count: count, orientation: 'landscape')
+    uri.query = URI.encode_www_form(query: 'gourmet food plating or wine', count: count, orientation: 'landscape')
 
     request = Net::HTTP::Get.new(uri)
     request['Authorization'] = "Client-ID #{access_key}"
@@ -45,9 +48,23 @@ class UnsplashClient
     end
   end
 
-  def self.fallback_images
-    [{ url: nil, alt: 'Gourmet food', credit: nil, credit_url: nil }]
+  def self.cached_or_fallback(count)
+    Rails.cache.read("#{CACHED_KEY_PREFIX}/#{count}") || fallback_images
   end
 
-  private_class_method :fetch_images, :request_photos, :parse_photos
+  def self.fallback_images
+    [
+      { url: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800', alt: 'Gourmet food plating', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800', alt: 'Fine dining dish', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800', alt: 'Artisan food preparation', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800', alt: 'Wine glasses', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800', alt: 'Plated pancakes with berries', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800', alt: 'Fresh salad bowl', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800', alt: 'Artisan pizza', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800', alt: 'Chocolate dessert', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800', alt: 'Pasta dish', credit: 'Unsplash', credit_url: 'https://unsplash.com' }
+    ]
+  end
+
+  private_class_method :fetch_images, :request_photos, :parse_photos, :cached_or_fallback
 end

@@ -1,12 +1,23 @@
 <div class="space-y-6">
   <h1 class="heading-page"><%= t(".title") %></h1>
 
-  <div class="category-chips">
-    <%= link_to t("web.items.index.all_categories"), web_explore_items_path, class: "shrink-0 badge #{params[:by_category].blank? ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+  <nav class="category-chips" aria-label="<%= t("web.items.index.categories") %>">
     <% Item::CATEGORIES.each do |key, label| %>
-      <%= link_to label, web_explore_items_path(by_category: key), class: "shrink-0 badge #{params[:by_category] == key ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+      <%= link_to label, web_explore_items_path(by_category: toggle_filter(:by_category, key), by_flavor_profile: params[:by_flavor_profile]),
+          class: "shrink-0 badge #{Array(params[:by_category]).include?(key) ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
     <% end %>
-  </div>
+  </nav>
+
+  <nav class="category-chips" aria-label="<%= t("web.items.index.flavor_profiles") %>">
+    <% %w[sweet salty sour bitter umami spicy smoky herbal floral fruity nutty earthy rich tangy].each do |flavor| %>
+      <%= link_to flavor.capitalize, web_explore_items_path(by_category: params[:by_category], by_flavor_profile: toggle_filter(:by_flavor_profile, flavor)),
+          class: "shrink-0 badge #{Array(params[:by_flavor_profile]).include?(flavor) ? 'badge--accent' : 'badge--subtle'} px-3 py-1" %>
+    <% end %>
+  </nav>
+
+  <% if Array(params[:by_category]).any? || Array(params[:by_flavor_profile]).any? %>
+    <%= link_to t("web.items.index.clear_filters"), web_explore_items_path, class: "text-link" %>
+  <% end %>
 
   <% if @items.any? %>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -18,7 +29,7 @@
     <%= render "web/shared/pagination" %>
   <% else %>
     <div class="empty-state">
-      <svg class="w-16 h-16 mx-auto mb-3" fill="none" stroke="currentColor" style="color: var(--border-subtle);" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      <svg class="w-16 h-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
       <p><%= t(".no_items") %></p>
     </div>
   <% end %>

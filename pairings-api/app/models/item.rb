@@ -79,7 +79,7 @@ class Item < ApplicationRecord
   scope :by_category, -> (category) { where(category: category) }
   scope :by_flavor_profile, -> (flavor_profile) {
     profiles = Array(flavor_profile)
-    where('flavor_profiles @> ARRAY[?]::varchar[]', profiles)
+    where('flavor_profiles && ARRAY[?]::varchar[]', profiles)
   }
   
   scope :visible_to, ->(user_id) {
@@ -87,7 +87,10 @@ class Item < ApplicationRecord
   }
 
   scope :search, ->(query) {
-    where('name ILIKE :q OR description ILIKE :q', q: "%#{query}%")
+    where(
+      'name ILIKE :q OR description ILIKE :q OR EXISTS (SELECT 1 FROM unnest(flavor_profiles) AS fp WHERE fp ILIKE :q)',
+      q: "%#{query}%"
+    )
   }
 
   def paired_items

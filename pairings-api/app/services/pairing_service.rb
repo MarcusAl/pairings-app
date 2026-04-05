@@ -73,25 +73,33 @@ class PairingService
 
   def parse_pairing_response(text_response)
     lines = text_response.split("\n").reject(&:empty?)
-    
-    item1_values = lines[0].split('|').map(&:strip)
-    item2_values = lines[1].split('|').map(&:strip)
-    
+    pipe_lines = lines.select { |l| l.include?('|') }
+
+    raise ParseError, "Expected 2 pipe-delimited lines, got #{pipe_lines.size}" unless pipe_lines.size >= 2
+
+    item1_values = pipe_lines[0].split('|').map(&:strip)
+    item2_values = pipe_lines[1].split('|').map(&:strip)
+
+    raise ParseError, "Item1 has #{item1_values.size} fields, expected at least 7" if item1_values.size < 7
+    raise ParseError, "Item2 has #{item2_values.size} fields, expected at least 12" if item2_values.size < 12
+
     {
       item1: Hash[Item::FIELDS.zip(item1_values[0..6])].merge(
-        flavor_profiles: item1_values[4].split(',')
+        flavor_profiles: (item1_values[4] || '').split(',').map(&:strip)
       ),
       item2: Hash[Item::FIELDS.zip(item2_values[0..6])].merge(
-        flavor_profiles: item2_values[4].split(',')
+        flavor_profiles: (item2_values[4] || '').split(',').map(&:strip)
       ),
       image_url: item2_values[7],
       pairing: {
         confidence_score: item2_values[8].to_f,
-        ai_reasoning: item2_values[9],
-        pairing_notes: item2_values[10],
-        strength: item2_values[11].to_i
+        ai_reasoning: item2_values[9] || '',
+        pairing_notes: item2_values[10] || '',
+        strength: (item2_values[11] || '3').to_i.clamp(1, 5)
       }
     }.deep_symbolize_keys
+  rescue ParseError
+    raise
   rescue StandardError => e
     raise ParseError, "Failed to parse response: #{e.message}"
   end

@@ -42,11 +42,27 @@ en:
         explore: "Explore"
         home: "Home"
         sign_out: "Sign out"
+        main_navigation: "Main navigation"
+        mobile_navigation: "Mobile navigation"
+      flash:
+        close: "Close notification"
+      locale_switcher:
+        label: "Select language"
+      carousel:
+        label: "Culinary inspiration"
+        previous: "Previous slide"
+        next: "Next slide"
+      show_topbar:
+        navigation: "Page navigation"
+        back: "Go back"
       item_card:
         public: "Public"
       pairing_card:
         ai: "AI"
         public: "Public"
+        strength:
+          one: "Strength %{count} out of 5"
+          other: "Strength %{count} out of 5"
     sessions:
       new:
         title: "Sign in"
@@ -80,6 +96,7 @@ en:
         new_pairing: "New pairing"
         items_count: "Items"
         pairings_count: "Pairings"
+        pairings_today: "Today"
         recent_items: "Recent Items"
         recent_pairings: "Recent Pairings"
         view_all: "View all"
@@ -92,7 +109,10 @@ en:
         add_item: "Add item"
         search_placeholder: "Search items..."
         all_categories: "All categories"
+        categories: "Filter by category"
+        flavor_profiles: "Filter by flavor"
         filter: "Filter"
+        clear_filters: "Clear filters"
         no_items: "No items yet."
         add_first_item: "Add your first item"
       show:
@@ -132,8 +152,11 @@ en:
         delete: "Delete"
         delete_confirm: "Delete this pairing?"
         strength: "Strength"
+        strength_value:
+          one: "Strength %{count} out of 5"
+          other: "Strength %{count} out of 5"
         confidence: "Confidence"
-        ai_reasoning: "AI Reasoning"
+        ai_reasoning: "Why they pair"
         notes: "Notes"
         ai_generated: "AI Generated"
         public: "Public"
@@ -145,6 +168,7 @@ en:
         add_item: "Add an item"
       create:
         notice: "Pairing is being generated..."
+        limit_reached: "Daily pairing limit reached. Try again tomorrow."
       destroy:
         notice: "Pairing deleted."
     explore:

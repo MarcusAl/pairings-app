@@ -1,29 +1,32 @@
-<div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <%= link_to web_items_path, class: "back-link" do %>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      <%= t(".back") %>
+<% content_for :topbar do %>
+  <%= render layout: "web/shared/show_topbar", locals: { back_path: web_items_path } do %>
+    <%= link_to edit_web_item_path(@item), class: "icon-btn", aria: { label: t(".edit") } do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
     <% end %>
-    <div class="flex gap-2">
-      <%= link_to t(".edit"), edit_web_item_path(@item), class: "btn btn--secondary btn--sm" %>
-      <%= button_to t(".delete"), web_item_path(@item), method: :delete,
-          data: { turbo_confirm: t(".delete_confirm") },
-          class: "btn btn--danger btn--sm" %>
-    </div>
-  </div>
+    <%= button_to web_item_path(@item), method: :delete,
+        data: { turbo_confirm: t(".delete_confirm") },
+        class: "icon-btn icon-btn--danger", aria: { label: t(".delete") } do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+    <% end %>
+  <% end %>
+<% end %>
 
-  <div class="card">
-    <% if @item.image.attached? %>
-      <div class="aspect-[16/9] sm:aspect-[2/1] overflow-hidden relative">
-        <%= image_tag @item.image, class: "w-full h-full object-cover sm:sticky sm:top-0 card__image-bg", alt: @item.name %>
-      </div>
-    <% end %>
+<div class="space-y-6">
+
+  <article class="card">
+    <div class="card__image aspect-[16/9] sm:aspect-[2/1]">
+      <% if @item.image.attached? %>
+        <%= image_tag @item.image, class: "w-full h-full object-cover", alt: @item.name %>
+      <% else %>
+        <div class="card__image-placeholder">
+          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/></svg>
+        </div>
+      <% end %>
+      <span class="badge--overlay"><%= Item::CATEGORIES[@item.category] %></span>
+      <h1 class="card__title--overlay text-lg"><%= @item.name %></h1>
+    </div>
 
     <div class="p-4 sm:p-6 space-y-4">
-      <div class="flex items-start justify-between gap-3">
-        <h1 class="heading-page"><%= @item.name %></h1>
-        <span class="shrink-0 badge badge--category px-3 py-1"><%= Item::CATEGORIES[@item.category] %></span>
-      </div>
 
       <% if @item.description.present? %>
         <p class="text-body"><%= @item.description %></p>
@@ -45,17 +48,17 @@
         <span>&middot; <%= @item.public? ? t(".public") : t(".private") %></span>
       </div>
     </div>
-  </div>
+  </article>
 
   <% pairings = @item.pairings_as_item1.or(@item.pairings_as_item2).includes(:item1, :item2).limit(6) %>
   <% if pairings.any? %>
-    <div class="space-y-3">
+    <section class="space-y-3">
       <h2 class="heading-section"><%= t(".pairings") %></h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <% pairings.each do |pairing| %>
           <%= render "web/shared/pairing_card", pairing: pairing %>
         <% end %>
       </div>
-    </div>
+    </section>
   <% end %>
 </div>

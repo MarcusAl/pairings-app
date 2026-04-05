@@ -14,6 +14,11 @@ module Web
     end
 
     def create
+      if current_user.pairing_limit_reached?
+        redirect_to new_web_pairing_path, alert: t('.limit_reached')
+        return
+      end
+
       item = current_user.items.find(params[:item1_id])
       PairingJob.perform_later(item, current_user)
       redirect_to web_pairings_path, notice: t('.notice')

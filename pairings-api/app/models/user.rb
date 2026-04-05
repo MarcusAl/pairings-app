@@ -14,8 +14,10 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
+  DAILY_PAIRING_LIMIT = 5
+
   has_secure_password
-  
+
   has_many :items, dependent: :destroy
   has_many :pairings, dependent: :destroy
 
@@ -40,5 +42,13 @@ class User < ApplicationRecord
 
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
+  end
+
+  def pairings_today
+    pairings.where(created_at: Time.current.all_day).count
+  end
+
+  def pairing_limit_reached?
+    pairings_today >= DAILY_PAIRING_LIMIT
   end
 end

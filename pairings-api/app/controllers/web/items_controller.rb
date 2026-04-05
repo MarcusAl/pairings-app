@@ -2,7 +2,8 @@ module Web
   class ItemsController < BaseController
     before_action :set_item, only: %i[show edit update destroy]
 
-    has_scope :by_category
+    has_scope :by_category, type: :array
+    has_scope :by_flavor_profile, type: :array
     has_scope :search
 
     def index
