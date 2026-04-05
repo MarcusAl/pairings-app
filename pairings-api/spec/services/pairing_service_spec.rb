@@ -53,7 +53,7 @@ RSpec.describe PairingService do
 
       it 'handles rate limiting errors' do
         allow(messages_resource).to receive(:create)
-          .and_raise(Anthropic::Errors::RateLimitError.new(url: URI("https://api.anthropic.com"), status: 429, body: nil, request: nil, response: nil))
+          .and_raise(Anthropic::Errors::RateLimitError.new(url: URI("https://api.anthropic.com"), status: 429, body: nil, headers: {}, request: nil, response: nil))
 
         expect { described_class.call(blob_image_id: blob.id) }
           .to raise_error(PairingService::TooManyRequestsError)
