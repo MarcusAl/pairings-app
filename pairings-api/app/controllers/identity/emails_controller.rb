@@ -5,7 +5,7 @@ class Identity::EmailsController < ApplicationController
     if @user.update(user_params)
       render_show
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: @user.errors, status: :unprocessable_content
     end
   end
 

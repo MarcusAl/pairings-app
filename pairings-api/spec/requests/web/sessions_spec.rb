@@ -26,7 +26,7 @@ RSpec.describe 'Web::Sessions', type: :request do
 
     it 'rejects invalid credentials' do
       post web_login_path, params: { email: user.email, password: 'wrong' }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

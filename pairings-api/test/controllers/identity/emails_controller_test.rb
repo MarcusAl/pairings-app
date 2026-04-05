@@ -21,7 +21,7 @@ class Identity::EmailsControllerTest < ActionDispatch::IntegrationTest
           params: { email: 'new_email@hey.com', password_challenge: 'SecretWrong1*3' },
           headers: default_headers
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_equal ['is invalid'], response.parsed_body['password_challenge']
   end
 end

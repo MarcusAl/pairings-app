@@ -17,13 +17,13 @@ RSpec.describe 'Web::Items', type: :request do
     end
 
     it 'only shows items belonging to the current user', :aggregate_failures do
-      item
-      other_item = create(:item)
+      create(:item, user: user, name: 'My Visible Item')
+      other_item = create(:item, name: 'ZZUNIQUEHIDDEN')
       sign_in(user)
 
       get web_items_path
 
-      expect(response.body).to include(item.name)
+      expect(response.body).to include('My Visible Item')
       expect(response.body).not_to include(other_item.name)
     end
 
@@ -88,7 +88,7 @@ RSpec.describe 'Web::Items', type: :request do
 
       post web_items_path, params: { item: { name: '' } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -115,7 +115,7 @@ RSpec.describe 'Web::Items', type: :request do
 
       patch web_item_path(item), params: { item: { category: '' } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

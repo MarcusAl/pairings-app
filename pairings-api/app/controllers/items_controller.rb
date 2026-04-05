@@ -21,7 +21,7 @@ class ItemsController < ApplicationController
       item = current_user.items.create!(item_params)
       render json: { data: item }, status: :created
     else
-      render json: { error: ["Image must be attached"] }, status: :unprocessable_entity
+      render json: { error: ["Image must be attached"] }, status: :unprocessable_content
     end
   rescue ActiveRecord::RecordInvalid, ActionController::ParameterMissing, ActiveRecord::NotNullViolation
     render json: { error: 'Bad Request' }, status: :bad_request
@@ -42,7 +42,7 @@ class ItemsController < ApplicationController
     @item.destroy!
     render json: { data: { message: 'Item deleted' } }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed => e
-    render json: { error: 'Failed to delete' }, status: :unprocessable_entity
+    render json: { error: 'Failed to delete' }, status: :unprocessable_content
   end
 
   private

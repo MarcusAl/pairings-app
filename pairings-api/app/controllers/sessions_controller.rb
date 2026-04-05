@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
 
     render json: { data: { message: 'Session destroyed' } }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
-    render json: { error: 'Failed to destroy session' }, status: :unprocessable_entity
+    render json: { error: 'Failed to destroy session' }, status: :unprocessable_content
   end
 
   private

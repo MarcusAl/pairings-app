@@ -20,7 +20,7 @@ RSpec.describe 'Web::Registrations', type: :request do
 
     it 'rejects invalid registration' do
       post web_signup_path, params: { user: { email: '', password: 'short', password_confirmation: 'short' } }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 end

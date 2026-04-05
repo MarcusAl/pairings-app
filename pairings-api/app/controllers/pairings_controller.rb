@@ -23,7 +23,7 @@ class PairingsController < ApplicationController
 
       render json: { data: item.id }, status: :created
     else
-      render json: { error: ["Item 1 must exist"] }, status: :unprocessable_entity
+      render json: { error: ["Item 1 must exist"] }, status: :unprocessable_content
     end
   rescue ActiveRecord::RecordInvalid, ActionController::ParameterMissing, ActiveRecord::NotNullViolation
     render json: { error: 'Bad Request' }, status: :bad_request
@@ -44,7 +44,7 @@ class PairingsController < ApplicationController
     @pairing.destroy!
     render json: { data: { message: 'Pairing deleted' } }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed => e
-    render json: { error: 'Failed to delete' }, status: :unprocessable_entity
+    render json: { error: 'Failed to delete' }, status: :unprocessable_content
   end
 
   private
