@@ -31,10 +31,10 @@ class Item < ApplicationRecord
 
   belongs_to :user
   has_one_attached :image
-  
+
   has_many :pairings_as_item1, class_name: 'Pairing', foreign_key: 'item1_id', dependent: :destroy
   has_many :pairings_as_item2, class_name: 'Pairing', foreign_key: 'item2_id', dependent: :destroy
-  
+
   CATEGORIES = {
     'main' => 'Main',
     'side' => 'Side',
@@ -56,18 +56,18 @@ class Item < ApplicationRecord
     '$$$$' => 'Luxury ($60+)'
   }
 
-  FIELDS = [
-    :name,
-    :description,
-    :category,
-    :subcategory,
-    :flavor_profiles,
-    :primary_flavor_profile,
-    :price_range
+  FIELDS = %i[
+    name
+    description
+    category
+    subcategory
+    flavor_profiles
+    primary_flavor_profile
+    price_range
   ].freeze
 
   validates :price_range, inclusion: { in: PRICE_RANGES.keys }, presence: true
-  validates :image, content_type: { in: [:png, :jpeg], spoofing_protection: true }, size: { less_than: 5.megabytes }
+  validates :image, content_type: { in: %i[png jpeg], spoofing_protection: true }, size: { less_than: 5.megabytes }
   validates :name, presence: true
   validates :category, presence: true, inclusion: { in: CATEGORIES.keys }
   validates :primary_flavor_profile, presence: true
@@ -76,17 +76,17 @@ class Item < ApplicationRecord
 
   scope :public_items, -> { where(public: true) }
   scope :private_items, -> { where(public: false) }
-  scope :by_category, -> (category) { where(category: category) }
-  scope :by_flavor_profile, -> (flavor_profile) {
+  scope :by_category, ->(category) { where(category: category) }
+  scope :by_flavor_profile, lambda { |flavor_profile|
     profiles = Array(flavor_profile)
     where('flavor_profiles && ARRAY[?]::varchar[]', profiles)
   }
-  
-  scope :visible_to, ->(user_id) {
+
+  scope :visible_to, lambda { |user_id|
     where('user_id = ? OR public = true', user_id)
   }
 
-  scope :search, ->(query) {
+  scope :search, lambda { |query|
     where(
       'name ILIKE :q OR description ILIKE :q OR EXISTS (SELECT 1 FROM unnest(flavor_profiles) AS fp WHERE fp ILIKE :q)',
       q: "%#{query}%"
@@ -100,7 +100,7 @@ class Item < ApplicationRecord
 
   def image_url(expires_in: 30.minutes)
     return nil unless image.attached?
-    
+
     case Rails.application.config.active_storage.service
     when :amazon
       image.blob.service_url(expires_in: expires_in)
@@ -110,25 +110,25 @@ class Item < ApplicationRecord
   end
 
   def as_json(options = {})
-    super(options).merge({
-      image_url: image_url
-    })
+    super.merge({
+                  image_url: image_url
+                })
   end
 
   def attach_image_from_url(url)
     return unless url.present?
-    
+
     require 'open-uri'
     begin
       downloaded_image = URI.open(url)
       content_type = downloaded_image.content_type
-      
-      extension = case content_type
-        when 'image/png' then '.png'
-        else '.jpg'
-      end
 
-      self.image.attach(
+      extension = case content_type
+                  when 'image/png' then '.png'
+                  else '.jpg'
+                  end
+
+      image.attach(
         io: downloaded_image,
         filename: "item_#{id}_#{Time.current.to_i}#{extension}",
         content_type: content_type,
@@ -149,9 +149,9 @@ class Item < ApplicationRecord
 
   def flavor_profiles_include_primary
     return if primary_flavor_profile.blank? || flavor_profiles.blank?
-    
-    unless flavor_profiles.include?(primary_flavor_profile)
-      errors.add(:primary_flavor_profile, "must be included in flavor profiles")
-    end
+
+    return if flavor_profiles.include?(primary_flavor_profile)
+
+    errors.add(:primary_flavor_profile, 'must be included in flavor profiles')
   end
 end

@@ -24,7 +24,7 @@ module Web
       if @item.save
         redirect_to web_item_path(@item), notice: t('.notice')
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -32,7 +32,7 @@ module Web
       if @item.update(item_params)
         redirect_to web_item_path(@item), notice: t('.notice')
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

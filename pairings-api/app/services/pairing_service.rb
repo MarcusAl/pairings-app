@@ -9,7 +9,7 @@ class PairingService
   class ParseError < PairingServiceError; end
   class NoPairingFoundError < PairingServiceError; end
 
-  require "base64"
+  require 'base64'
 
   def self.call(blob_image_id:)
     new(blob_image_id).call
@@ -53,7 +53,7 @@ class PairingService
 
   def client
     @client ||= Anthropic::Client.new(
-      api_key: ENV["ANTHROPIC_API_KEY"] || Rails.application.credentials.anthropic_api_key,
+      api_key: ENV['ANTHROPIC_API_KEY'] || Rails.application.credentials.anthropic_api_key,
       timeout: 240
     )
   end

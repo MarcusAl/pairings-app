@@ -54,15 +54,24 @@ class UnsplashClient
 
   def self.fallback_images
     [
-      { url: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800', alt: 'Gourmet food plating', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800', alt: 'Fine dining dish', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800', alt: 'Artisan food preparation', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800', alt: 'Wine glasses', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800', alt: 'Plated pancakes with berries', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800', alt: 'Fresh salad bowl', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800', alt: 'Artisan pizza', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800', alt: 'Chocolate dessert', credit: 'Unsplash', credit_url: 'https://unsplash.com' },
-      { url: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800', alt: 'Pasta dish', credit: 'Unsplash', credit_url: 'https://unsplash.com' }
+      { url: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800', alt: 'Gourmet food plating',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800', alt: 'Fine dining dish',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800', alt: 'Artisan food preparation',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800', alt: 'Wine glasses',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800', alt: 'Plated pancakes with berries',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800', alt: 'Fresh salad bowl',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800', alt: 'Artisan pizza',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800', alt: 'Chocolate dessert',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' },
+      { url: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800', alt: 'Pasta dish',
+        credit: 'Unsplash', credit_url: 'https://unsplash.com' }
     ]
   end
 
