@@ -1,4 +1,7 @@
-# Pairings API
+# Pairings App/API
+
+<img width="1508" height="805" alt="Screenshot 2026-04-05 at 15 07 24" src="https://github.com/user-attachments/assets/22ffa308-d1e7-40cb-ab44-8ab72c419519" />
+
 
 ## API Documentation
 
