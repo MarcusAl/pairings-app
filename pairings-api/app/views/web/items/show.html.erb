@@ -14,8 +14,8 @@
 
   <div class="card">
     <% if @item.image.attached? %>
-      <div class="aspect-[16/9] sm:aspect-[2/1] overflow-hidden" style="background: var(--border-card);">
-        <%= image_tag @item.image, class: "w-full h-full object-cover", alt: @item.name %>
+      <div class="aspect-[16/9] sm:aspect-[2/1] overflow-hidden relative">
+        <%= image_tag @item.image, class: "w-full h-full object-cover sm:sticky sm:top-0 card__image-bg", alt: @item.name %>
       </div>
     <% end %>
 

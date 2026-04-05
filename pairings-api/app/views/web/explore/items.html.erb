@@ -1,6 +1,13 @@
 <div class="space-y-6">
   <h1 class="heading-page"><%= t(".title") %></h1>
 
+  <div class="category-chips">
+    <%= link_to t("web.items.index.all_categories"), web_explore_items_path, class: "shrink-0 badge #{params[:by_category].blank? ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+    <% Item::CATEGORIES.each do |key, label| %>
+      <%= link_to label, web_explore_items_path(by_category: key), class: "shrink-0 badge #{params[:by_category] == key ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+    <% end %>
+  </div>
+
   <% if @items.any? %>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
       <% @items.each do |item| %>

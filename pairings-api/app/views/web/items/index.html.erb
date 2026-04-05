@@ -4,11 +4,16 @@
     <%= link_to t(".add_item"), new_web_item_path, class: "btn btn--primary" %>
   </div>
 
-  <%= form_with url: web_items_path, method: :get, class: "grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-2", data: { turbo_frame: "_top" } do |f| %>
+  <div class="category-chips">
+    <%= link_to t(".all_categories"), web_items_path, class: "shrink-0 badge #{params[:by_category].blank? ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+    <% Item::CATEGORIES.each do |key, label| %>
+      <%= link_to label, web_items_path(by_category: key), class: "shrink-0 badge #{params[:by_category] == key ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+    <% end %>
+  </div>
+
+  <%= form_with url: web_items_path, method: :get, class: "grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2", data: { turbo_frame: "_top" } do |f| %>
+    <%= f.hidden_field :by_category, value: params[:by_category] %>
     <%= f.search_field :search, value: params[:search], placeholder: t(".search_placeholder"), class: "form-input mt-0" %>
-    <%= f.select :by_category, options_for_select(Item::CATEGORIES.map { |k, v| [v, k] }, params[:by_category]),
-        { include_blank: t(".all_categories") },
-        class: "form-select mt-0" %>
     <%= f.submit t(".filter"), class: "btn btn--secondary cursor-pointer" %>
   <% end %>
 

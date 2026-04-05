@@ -59,6 +59,10 @@
   background: var(--border-card);
 }
 
+.card__image-bg {
+  background: var(--border-card);
+}
+
 .card__image-placeholder {
   @apply w-full h-full flex items-center justify-center;
   color: var(--border-subtle);
@@ -439,6 +443,15 @@
 .pairing-separator {
   @apply shrink-0;
   color: var(--accent-primary);
+}
+
+.category-chips {
+  @apply flex gap-2 overflow-x-auto pb-1;
+  scrollbar-width: none;
+}
+
+.category-chips::-webkit-scrollbar {
+  display: none;
 }
 
 .locale-select {
