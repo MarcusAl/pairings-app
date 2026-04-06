@@ -1,4 +1,4 @@
-<div class="space-y-8">
+<div class="space-y-8" data-controller="animation">
   <div class="flex items-center justify-between">
     <h1 class="heading-page"><%= t(".title") %></h1>
     <div class="flex gap-2">
@@ -7,14 +7,18 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-2 gap-4">
-    <div class="stat-card">
-      <p class="text-2xl font-bold" style="color: var(--text-primary);"><%= current_user.items.count %></p>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="stat-card animate--fade-up" data-animation-target="item" data-animation-delay="0">
+      <p class="text-2xl font-bold"><%= current_user.items.count %></p>
       <p class="text-detail mt-1"><%= t(".items_count") %></p>
     </div>
-    <div class="stat-card">
-      <p class="text-2xl font-bold" style="color: var(--text-primary);"><%= current_user.pairings.count %></p>
+    <div class="stat-card animate--fade-up" data-animation-target="item" data-animation-delay="100">
+      <p class="text-2xl font-bold"><%= current_user.pairings.count %></p>
       <p class="text-detail mt-1"><%= t(".pairings_count") %></p>
+    </div>
+    <div class="stat-card animate--fade-up" data-animation-target="item" data-animation-delay="200">
+      <p class="text-2xl font-bold"><%= current_user.pairings_today %>/<%= User::DAILY_PAIRING_LIMIT %></p>
+      <p class="text-detail mt-1"><%= t(".pairings_today") %></p>
     </div>
   </div>
 

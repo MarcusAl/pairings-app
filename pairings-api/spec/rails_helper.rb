@@ -3,16 +3,15 @@ require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Rails.root.glob('spec/support/**/*.rb').each { |f| require f }
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Uncomment the line below in case you have `--require rails_helper` in the `.rspec` file
 # that will avoid rails generators crashing because migrations haven't been run yet
 # return unless Rails.env.test?
 require 'rspec/rails'
-require 'sidekiq/testing'
 require 'vcr'
 
-Sidekiq::Testing.inline!
+Sidekiq.testing!(:inline)
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -31,7 +30,6 @@ Sidekiq::Testing.inline!
 #
 # Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 
-
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
@@ -45,11 +43,11 @@ RSpec.configure do |config|
     Rails.root.join('spec/fixtures')
   ]
 
-  config.after(:each) do
+  config.after do
     FileUtils.rm_rf(ActiveStorage::Blob.service.root)
   end
 
-  config.before(:each) do
+  config.before do
     ActiveJob::Base.queue_adapter.enqueued_jobs.clear
   end
 

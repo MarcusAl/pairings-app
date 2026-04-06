@@ -14,13 +14,13 @@
     <%= f.label :image, class: "form-label" %>
     <%= f.file_field :image, accept: "image/png,image/jpeg", class: "form-file",
         data: { image_preview_target: "input", action: "change->image-preview#preview" } %>
-    <% if item.image.attached? %>
-      <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden" style="background: var(--border-card);">
+    <% if item.image.attached? && item.persisted? %>
+      <div class="mt-2 w-24 h-24 rounded overflow-hidden image-bg">
         <%= image_tag item.image, class: "w-full h-full object-cover", alt: t("web.items.form.current_image"),
             data: { image_preview_target: "preview" } %>
       </div>
     <% else %>
-      <div class="mt-2 w-24 h-24 rounded-lg overflow-hidden hidden" style="background: var(--border-card);" data-image-preview-target="container">
+      <div class="mt-2 w-24 h-24 rounded overflow-hidden image-bg hidden" data-image-preview-target="container">
         <img class="w-full h-full object-cover" data-image-preview-target="preview" alt="">
       </div>
     <% end %>

@@ -14,7 +14,7 @@ module Web
         log_in(@user)
         redirect_to web_root_path, notice: t('.notice')
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

@@ -4,11 +4,40 @@
     <%= link_to t(".add_item"), new_web_item_path, class: "btn btn--primary" %>
   </div>
 
-  <%= form_with url: web_items_path, method: :get, class: "grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-2", data: { turbo_frame: "_top" } do |f| %>
-    <%= f.search_field :search, value: params[:search], placeholder: t(".search_placeholder"), class: "form-input mt-0" %>
-    <%= f.select :by_category, options_for_select(Item::CATEGORIES.map { |k, v| [v, k] }, params[:by_category]),
-        { include_blank: t(".all_categories") },
-        class: "form-select mt-0" %>
+  <nav class="category-chips" aria-label="<%= t(".categories") %>">
+    <% Item::CATEGORIES.each do |key, label| %>
+      <%= link_to label, web_items_path(by_category: toggle_filter(:by_category, key), by_flavor_profile: params[:by_flavor_profile]),
+          class: "shrink-0 badge #{Array(params[:by_category]).include?(key) ? 'badge--flavor-primary' : 'badge--flavor'} px-3 py-1" %>
+    <% end %>
+  </nav>
+
+  <nav class="category-chips" aria-label="<%= t(".flavor_profiles") %>">
+    <% %w[sweet salty sour bitter umami spicy smoky herbal floral fruity nutty earthy rich tangy].each do |flavor| %>
+      <%= link_to flavor.capitalize, web_items_path(by_category: params[:by_category], by_flavor_profile: toggle_filter(:by_flavor_profile, flavor)),
+          class: "shrink-0 badge #{Array(params[:by_flavor_profile]).include?(flavor) ? 'badge--accent' : 'badge--subtle'} px-3 py-1" %>
+    <% end %>
+  </nav>
+
+  <% if Array(params[:by_category]).any? || Array(params[:by_flavor_profile]).any? %>
+    <%= link_to t(".clear_filters"), web_items_path, class: "text-link" %>
+  <% end %>
+
+  <%= form_with url: web_items_path, method: :get, class: "grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2",
+      data: { turbo_frame: "_top", controller: "search-reset", action: "search->search-reset#reset" } do |f| %>
+    <% Array(params[:by_category]).each do |cat| %>
+      <input type="hidden" name="by_category[]" value="<%= cat %>">
+    <% end %>
+    <% Array(params[:by_flavor_profile]).each do |fp| %>
+      <input type="hidden" name="by_flavor_profile[]" value="<%= fp %>">
+    <% end %>
+    <div class="search-wrapper">
+      <svg class="search-wrapper__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <%= f.search_field :search, value: params[:search], placeholder: t(".search_placeholder"), class: "form-input mt-0",
+          data: { search_reset_target: "input", action: "input->search-reset#toggleClear search->search-reset#reset" } %>
+      <button type="button" class="search-clear <%= 'hidden' if params[:search].blank? %>" data-search-reset-target="clear" data-action="search-reset#clearAndSubmit" aria-label="Clear search">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
     <%= f.submit t(".filter"), class: "btn btn--secondary cursor-pointer" %>
   <% end %>
 
@@ -22,8 +51,9 @@
     <%= render "web/shared/pagination" %>
   <% else %>
     <div class="empty-state">
+      <svg class="w-16 h-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
       <p><%= t(".no_items") %></p>
-      <%= link_to t(".add_first_item"), new_web_item_path, class: "mt-2 inline-block text-link" %>
+      <%= link_to t(".add_first_item"), new_web_item_path, class: "mt-3 inline-block btn btn--primary" %>
     </div>
   <% end %>
 </div>

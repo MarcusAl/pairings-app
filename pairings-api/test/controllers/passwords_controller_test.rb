@@ -23,7 +23,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
                     password_confirmation: 'Secret6*4*2*' },
           headers: default_headers
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_equal ['is invalid'], response.parsed_body['password_challenge']
   end
 end

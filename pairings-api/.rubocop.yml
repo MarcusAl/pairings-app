@@ -1,12 +1,13 @@
 inherit_from:
   - .rubocop_todo.yml
 
-inherit_gem:
-  rubocop-pave:
-    - default.yml
+plugins:
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-rspec
 
-RSpecRails/InferredSpecType:
-  Enabled: false
+AllCops:
+  SuggestExtensions: false
 
 Rails/ApplicationController:
   Exclude:
@@ -21,3 +22,9 @@ Naming/VariableNumber:
 Metrics/MethodLength:
   CountAsOne:
     - array
+
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MultipleExpectations:
+  Max: 3

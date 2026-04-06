@@ -3,6 +3,6 @@
     <%= f.select :locale,
         available_locales.map { |loc| [t("language_name", locale: loc), loc] },
         { selected: I18n.locale },
-        { class: "locale-select", onchange: "this.form.requestSubmit()" } %>
+        { class: "locale-select", onchange: "this.form.requestSubmit()", "aria-label": t("web.shared.locale_switcher.label") } %>
   <% end %>
 <% end %>

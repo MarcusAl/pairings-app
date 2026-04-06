@@ -2,7 +2,8 @@ module Web
   class ItemsController < BaseController
     before_action :set_item, only: %i[show edit update destroy]
 
-    has_scope :by_category
+    has_scope :by_category, type: :array
+    has_scope :by_flavor_profile, type: :array
     has_scope :search
 
     def index
@@ -23,7 +24,7 @@ module Web
       if @item.save
         redirect_to web_item_path(@item), notice: t('.notice')
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -31,7 +32,7 @@ module Web
       if @item.update(item_params)
         redirect_to web_item_path(@item), notice: t('.notice')
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

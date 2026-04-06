@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#00291C"/>
+  <!-- Left ring (olive) -->
+  <circle cx="210" cy="256" r="100" fill="none" stroke="#687451" stroke-width="32"/>
+  <!-- Right ring (leather) -->
+  <circle cx="302" cy="256" r="100" fill="none" stroke="#954130" stroke-width="32"/>
+  <!-- Overlap: dim the right ring where it passes behind the left -->
+  <clipPath id="clip">
+    <circle cx="210" cy="256" r="100"/>
+  </clipPath>
+  <circle cx="302" cy="256" r="100" fill="none" stroke="#954130" stroke-width="32" clip-path="url(#clip)" opacity="0.35"/>
+  <!-- Overlap: redraw left ring over right to show it in front -->
+  <clipPath id="clip2">
+    <circle cx="302" cy="256" r="100"/>
+  </clipPath>
+  <circle cx="210" cy="256" r="100" fill="none" stroke="#687451" stroke-width="32" clip-path="url(#clip2)"/>
+</svg>

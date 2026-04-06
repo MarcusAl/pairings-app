@@ -1,70 +1,71 @@
-<div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <%= link_to web_pairings_path, class: "back-link" do %>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      <%= t(".back") %>
-    <% end %>
-    <%= button_to t(".delete"), web_pairing_path(@pairing), method: :delete,
+<% content_for :topbar do %>
+  <%= render layout: "web/shared/show_topbar", locals: { back_path: web_pairings_path } do %>
+    <%= button_to web_pairing_path(@pairing), method: :delete,
         data: { turbo_confirm: t(".delete_confirm") },
-        class: "btn btn--danger btn--sm" %>
-  </div>
+        class: "icon-btn icon-btn--danger", aria: { label: t(".delete") } do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+    <% end %>
+  <% end %>
+<% end %>
 
-  <div class="card">
-    <div class="flex">
-      <% [@pairing.item1, @pairing.item2].each do |item| %>
-        <%= link_to web_item_path(item), class: "w-1/2 group" do %>
-          <div class="aspect-square overflow-hidden" style="background: var(--border-card);">
-            <% if item.image.attached? %>
-              <%= image_tag item.image, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300", alt: item.name %>
-            <% end %>
-          </div>
-          <div class="p-3 text-center">
-            <p class="text-sm font-semibold truncate" style="color: var(--text-primary);"><%= item.name %></p>
-            <span class="text-detail"><%= Item::CATEGORIES[item.category] %></span>
+<div class="space-y-6" data-controller="animation">
+
+  <article class="card">
+    <div class="pairing__images">
+      <% [@pairing.item1, @pairing.item2].each_with_index do |item, idx| %>
+        <%= link_to web_item_path(item), class: "pairing__image group animate--scale-in", data: { animation_target: "item", animation_delay: idx * 150 } do %>
+          <% if item.image.attached? %>
+            <%= image_tag item.image, class: "w-full h-full object-cover", alt: item.name %>
+          <% end %>
+          <div class="absolute inset-x-0 bottom-0 z-10 p-3 text-center">
+            <p class="text-sm font-bold truncate text-white drop-shadow-md"><%= item.name %></p>
+            <span class="text-xs text-white/80 drop-shadow-md"><%= Item::CATEGORIES[item.category] %></span>
           </div>
         <% end %>
       <% end %>
+      <div class="pairing__connector" aria-hidden="true">&times;</div>
     </div>
 
     <div class="p-4 sm:p-6 space-y-4 border-t divider">
       <% if @pairing.strength %>
         <div class="flex items-center gap-3">
-          <span class="text-sm font-medium" style="color: var(--text-primary);"><%= t(".strength") %></span>
-          <div class="flex gap-1">
+          <span class="text-sm font-medium"><%= t(".strength") %></span>
+          <div class="flex gap-1.5" role="img" aria-label="<%= t(".strength_value", count: @pairing.strength) %>">
             <% 5.times do |i| %>
-              <div class="w-8 h-2 strength-bar <%= 'strength-bar--filled' if i < @pairing.strength %>"></div>
+              <div class="w-8 h-2.5 rounded-full strength-bar <%= 'strength-bar--filled animate--fill' if i < @pairing.strength %>"
+                   <%= "data-animation-target=item data-animation-delay=#{300 + i * 100}".html_safe if i < @pairing.strength %>></div>
             <% end %>
           </div>
-          <span class="text-detail"><%= @pairing.strength %>/5</span>
+          <span class="strength-label"><%= @pairing.strength %>/5</span>
         </div>
       <% end %>
 
       <% if @pairing.confidence_score %>
         <div class="flex items-center gap-3">
-          <span class="text-sm font-medium" style="color: var(--text-primary);"><%= t(".confidence") %></span>
-          <span class="text-detail"><%= number_to_percentage(@pairing.confidence_score * 100, precision: 0) %></span>
+          <span class="text-sm font-medium"><%= t(".confidence") %></span>
+          <span class="strength-label"><%= number_to_percentage(@pairing.confidence_score * 100, precision: 0) %></span>
         </div>
       <% end %>
 
       <% if @pairing.ai_reasoning.present? %>
         <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--text-primary);"><%= t(".ai_reasoning") %></h3>
+          <h3 class="text-sm font-medium mb-1"><%= t(".ai_reasoning") %></h3>
           <p class="text-body"><%= @pairing.ai_reasoning %></p>
         </div>
       <% end %>
 
       <% if @pairing.pairing_notes.present? %>
         <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--text-primary);"><%= t(".notes") %></h3>
+          <h3 class="text-sm font-medium mb-1"><%= t(".notes") %></h3>
           <p class="text-body"><%= @pairing.pairing_notes %></p>
         </div>
       <% end %>
 
-      <div class="flex items-center gap-2 text-detail border-t pt-4 divider">
+      <footer class="flex items-center gap-2 text-detail border-t pt-4 divider">
         <% if @pairing.ai? %><span class="badge--ai"><%= t(".ai_generated") %></span><% end %>
         <span><%= @pairing.public? ? t(".public") : t(".private") %></span>
         <span>&middot; <%= time_ago_in_words(@pairing.created_at) %> ago</span>
-      </div>
+      </footer>
     </div>
-  </div>
+  </article>
 </div>

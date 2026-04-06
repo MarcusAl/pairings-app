@@ -14,7 +14,7 @@ module Web
         redirect_to web_root_path, notice: t('.notice')
       else
         flash.now[:alert] = t('.alert')
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

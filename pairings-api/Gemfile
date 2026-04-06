@@ -77,10 +77,11 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rswag-specs'
   gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem 'brakeman', require: false
-
-  gem 'rubocop-pave', require: false
 end
 
 gem 'factory_bot'
