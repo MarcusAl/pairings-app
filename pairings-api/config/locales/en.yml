@@ -28,153 +28,153 @@
 #       enabled: "ON"
 
 en:
-  language_name: "English"
+  language_name: 'English'
   web:
     base:
       authenticate:
-        alert: "Please sign in."
+        alert: 'Please sign in.'
     shared:
       navbar:
-        brand: "Pairings"
-        dashboard: "Dashboard"
-        items: "Items"
-        pairings: "Pairings"
-        explore: "Explore"
-        home: "Home"
-        sign_out: "Sign out"
-        main_navigation: "Main navigation"
-        mobile_navigation: "Mobile navigation"
+        brand: 'Pairings'
+        dashboard: 'Dashboard'
+        items: 'Items'
+        pairings: 'Pairings'
+        explore: 'Explore'
+        home: 'Home'
+        sign_out: 'Sign out'
+        main_navigation: 'Main navigation'
+        mobile_navigation: 'Mobile navigation'
       flash:
-        close: "Close notification"
+        close: 'Close notification'
       locale_switcher:
-        label: "Select language"
+        label: 'Select language'
       carousel:
-        label: "Culinary inspiration"
-        previous: "Previous slide"
-        next: "Next slide"
+        label: 'Culinary inspiration'
+        previous: 'Previous slide'
+        next: 'Next slide'
       show_topbar:
-        navigation: "Page navigation"
-        back: "Go back"
+        navigation: 'Page navigation'
+        back: 'Go back'
       item_card:
-        public: "Public"
+        public: 'Public'
       pairing_card:
-        ai: "AI"
-        public: "Public"
+        ai: 'AI'
+        public: 'Public'
         strength:
-          one: "Strength %{count} out of 5"
-          other: "Strength %{count} out of 5"
+          one: 'Strength %{count} out of 5'
+          other: 'Strength %{count} out of 5'
     sessions:
       new:
-        title: "Sign in"
-        subtitle: "Welcome back to Pairings"
-        sign_in: "Sign in"
-        or: "or"
-        continue_with_auth0: "Continue with Auth0"
+        title: 'Sign in'
+        subtitle: 'Welcome back to Pairings'
+        sign_in: 'Sign in'
+        or: 'or'
+        continue_with_auth0: 'Continue with Auth0'
         no_account_html: "Don't have an account? %{link}"
-        sign_up: "Sign up"
+        sign_up: 'Sign up'
       create:
-        notice: "Signed in."
-        alert: "Invalid email or password."
+        notice: 'Signed in.'
+        alert: 'Invalid email or password.'
       destroy:
-        notice: "Signed out."
+        notice: 'Signed out.'
     registrations:
       new:
-        title: "Create account"
-        subtitle: "Start pairing your favourite foods and drinks"
-        password_label: "Password (12 characters minimum)"
-        create_account: "Create account"
-        or: "or"
-        continue_with_auth0: "Continue with Auth0"
-        have_account_html: "Already have an account? %{link}"
-        sign_in: "Sign in"
+        title: 'Create account'
+        subtitle: 'Start pairing your favourite foods and drinks'
+        password_label: 'Password (12 characters minimum)'
+        create_account: 'Create account'
+        or: 'or'
+        continue_with_auth0: 'Continue with Auth0'
+        have_account_html: 'Already have an account? %{link}'
+        sign_in: 'Sign in'
       create:
-        notice: "Account created."
+        notice: 'Account created.'
     dashboard:
       index:
-        title: "Dashboard"
-        add_item: "Add item"
-        new_pairing: "New pairing"
-        items_count: "Items"
-        pairings_count: "Pairings"
-        pairings_today: "Today"
-        recent_items: "Recent Items"
-        recent_pairings: "Recent Pairings"
-        view_all: "View all"
-        no_items: "No items yet. Add your first item to get started."
-        no_pairings: "No pairings yet. Start pairing your items with AI."
-        inspiration: "Culinary Inspiration"
+        title: 'Dashboard'
+        add_item: 'Add item'
+        new_pairing: 'New pairing'
+        items_count: 'Items'
+        pairings_count: 'Pairings'
+        pairings_today: 'Today'
+        recent_items: 'Recent Items'
+        recent_pairings: 'Recent Pairings'
+        view_all: 'View all'
+        no_items: 'No items yet. Add your first item to get started.'
+        no_pairings: 'No pairings yet. Start pairing your items with AI.'
+        inspiration: 'Culinary Inspiration'
     items:
       index:
-        title: "My Items"
-        add_item: "Add item"
-        search_placeholder: "Search items..."
-        all_categories: "All categories"
-        categories: "Filter by category"
-        flavor_profiles: "Filter by flavor"
-        filter: "Filter"
-        clear_filters: "Clear filters"
-        no_items: "No items yet."
-        add_first_item: "Add your first item"
+        title: 'My Items'
+        add_item: 'Add item'
+        search_placeholder: 'Search items...'
+        all_categories: 'All categories'
+        categories: 'Filter by category'
+        flavor_profiles: 'Filter by flavor'
+        filter: 'Filter'
+        clear_filters: 'Clear filters'
+        no_items: 'No items yet.'
+        add_first_item: 'Add your first item'
       show:
-        back: "Items"
-        edit: "Edit"
-        delete: "Delete"
-        delete_confirm: "Delete this item?"
-        public: "Public"
-        private: "Private"
-        pairings: "Pairings"
+        back: 'Items'
+        edit: 'Edit'
+        delete: 'Delete'
+        delete_confirm: 'Delete this item?'
+        public: 'Public'
+        private: 'Private'
+        pairings: 'Pairings'
       new:
-        title: "New item"
+        title: 'New item'
       edit:
-        title: "Edit item"
+        title: 'Edit item'
       form:
-        current_image: "Current image"
-        select_category: "Select category"
-        select_range: "Select range"
-        subcategory_placeholder: "e.g. red wine, steak, lager"
-        flavor_profiles: "Flavor profiles"
-        primary_flavor_placeholder: "Must be one of the selected flavors above"
-        make_public: "Make this item public"
+        current_image: 'Current image'
+        select_category: 'Select category'
+        select_range: 'Select range'
+        subcategory_placeholder: 'e.g. red wine, steak, lager'
+        flavor_profiles: 'Flavor profiles'
+        primary_flavor_placeholder: 'Must be one of the selected flavors above'
+        make_public: 'Make this item public'
       create:
-        notice: "Item created."
+        notice: 'Item created.'
       update:
-        notice: "Item updated."
+        notice: 'Item updated.'
       destroy:
-        notice: "Item deleted."
+        notice: 'Item deleted.'
     pairings:
       index:
-        title: "My Pairings"
-        new_pairing: "New pairing"
-        no_pairings: "No pairings yet."
-        create_first: "Create your first pairing"
+        title: 'My Pairings'
+        new_pairing: 'New pairing'
+        no_pairings: 'No pairings yet.'
+        create_first: 'Create your first pairing'
       show:
-        back: "Pairings"
-        delete: "Delete"
-        delete_confirm: "Delete this pairing?"
-        strength: "Strength"
+        back: 'Pairings'
+        delete: 'Delete'
+        delete_confirm: 'Delete this pairing?'
+        strength: 'Strength'
         strength_value:
-          one: "Strength %{count} out of 5"
-          other: "Strength %{count} out of 5"
-        confidence: "Confidence"
-        ai_reasoning: "Why they pair"
-        notes: "Notes"
-        ai_generated: "AI Generated"
-        public: "Public"
-        private: "Private"
+          one: 'Strength %{count} out of 5'
+          other: 'Strength %{count} out of 5'
+        confidence: 'Confidence'
+        ai_reasoning: 'Why they pair'
+        notes: 'Notes'
+        ai_generated: 'AI Generated'
+        public: 'Public'
+        private: 'Private'
       new:
-        title: "New pairing"
-        subtitle: "Select an item to pair. Our AI will analyze it and suggest the perfect match."
-        no_items: "You need items before creating a pairing."
-        add_item: "Add an item"
+        title: 'New pairing'
+        subtitle: 'Select an item to generate a tasty accompaniment for. Our system will analyse it and suggest the perfect match.'
+        no_items: 'You need items before creating a pairing.'
+        add_item: 'Add an item'
       create:
-        notice: "Pairing is being generated..."
-        limit_reached: "Daily pairing limit reached. Try again tomorrow."
+        notice: 'Pairing is being generated...'
+        limit_reached: 'Daily pairing limit reached. Try again tomorrow.'
       destroy:
-        notice: "Pairing deleted."
+        notice: 'Pairing deleted.'
     explore:
       items:
-        title: "Explore Items"
-        no_items: "No public items yet."
+        title: 'Explore Items'
+        no_items: 'No public items yet.'
       pairings:
-        title: "Explore Pairings"
-        no_pairings: "No public pairings yet."
+        title: 'Explore Pairings'
+        no_pairings: 'No public pairings yet.'
