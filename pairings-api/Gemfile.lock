@@ -267,7 +267,7 @@ GEM
     omniauth-oauth2 (1.9.0)
       oauth2 (>= 2.0.2, < 3)
       omniauth (~> 2.0)
-    omniauth-rails_csrf_protection (1.0.2)
+    omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     ostruct (0.6.3)
@@ -517,7 +517,7 @@ DEPENDENCIES
   importmap-rails
   kamal
   omniauth-auth0 (~> 3.0)
-  omniauth-rails_csrf_protection (~> 1.0)
+  omniauth-rails_csrf_protection (~> 2.0)
   pagy (~> 9.3)
   pg
   propshaft
