@@ -1,6 +1,6 @@
 module Web
   class BaseController < ActionController::Base
-    include Pagy::Backend
+    include Pagy::Method
 
     protect_from_forgery with: :exception
     layout 'web'
@@ -10,7 +10,6 @@ module Web
     before_action :restore_session
     before_action :authenticate
 
-    helper Pagy::Frontend
     helper_method :current_user, :available_locales
 
     private

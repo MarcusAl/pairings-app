@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
   def index
     pagy, items = pagy(apply_scopes(current_user.items).order(created_at: :desc))
 
-    render json: { data: items, meta: pagy_metadata(pagy) }
+    render json: { data: items, meta: { page: pagy.in, pages: pagy.pages, count: pagy.count } }
   end
 
   def show

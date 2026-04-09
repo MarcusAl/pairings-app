@@ -8,6 +8,8 @@ plugins:
 
 AllCops:
   SuggestExtensions: false
+  Exclude:
+    - '**/*.erb'
 
 Rails/ApplicationController:
   Exclude:
