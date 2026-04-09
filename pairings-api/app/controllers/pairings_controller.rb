@@ -10,7 +10,7 @@ class PairingsController < ApplicationController
   def index
     pagy, pairings = pagy(apply_scopes(Pairing).order(created_at: :desc))
 
-    render json: { data: pairings, meta: pagy_metadata(pagy) }
+    render json: { data: pairings, meta: { page: pagy.in, pages: pagy.pages, count: pagy.count } }
   end
 
   def show

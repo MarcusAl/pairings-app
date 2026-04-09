@@ -51,7 +51,7 @@ gem 'rswag-ui'
 gem 'aws-sdk-s3', require: false
 gem 'active_storage_validations'
 
-gem 'pagy', '~> 9.3'
+gem 'pagy', '~> 43.5'
 gem 'has_scope'
 
 gem 'omniauth-auth0', '~> 3.0'
@@ -63,7 +63,7 @@ group :development do
 end
 
 group :test do
-  gem 'shoulda-matchers', '~> 6.0'
+  gem 'shoulda-matchers', '~> 7.0'
   gem 'vcr'
   gem 'webmock'
 end
