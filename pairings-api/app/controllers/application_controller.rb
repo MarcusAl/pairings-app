@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :set_current_request_details
   before_action :authenticate
@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
 
   def authenticate
     session_record = authenticate_with_http_token { |token, _| Session.find_signed(token) }
-    
+
     if session_record && !session_record.expired?
       Current.session = session_record
       Current.user = session_record.user
